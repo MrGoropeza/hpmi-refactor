@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
@@ -7,7 +7,7 @@ import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { MegaMenuModule } from 'primeng/megamenu';
 import { SlideMenuModule } from 'primeng/slidemenu';
-import { filter } from 'rxjs';
+import { filter, map, Observable, of, switchMap } from 'rxjs';
 import { MENU_CONFIG } from '../../config/menu.config';
 
 @Component({
@@ -24,24 +24,30 @@ import { MENU_CONFIG } from '../../config/menu.config';
     SlideMenuModule,
   ],
 })
-export class MainLayoutComponent implements OnInit {
-  breadcrumbItems: MenuItem[] = [];
+export class MainLayoutComponent {
+  breadcrumbItems$: Observable<MenuItem[]> = this.router.events.pipe(
+    filter((event) => event instanceof NavigationEnd),
+    switchMap(() =>
+      of(
+        this.createBreadcrumbs(this.activatedRoute, this.activatedRoute.root, [
+          { icon: 'pi pi-home', routerLink: '/' },
+        ])
+      )
+    )
+  );
+
+  cardHeader$: Observable<string> = this.router.events.pipe(
+    filter((event) => event instanceof NavigationEnd),
+    switchMap(() =>
+      this.getActualActivatedRoute(this.activatedRoute).title.pipe(
+        map((value) => value ?? '')
+      )
+    )
+  );
+
   menuItems: MenuItem[] = MENU_CONFIG;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute) {}
-
-  ngOnInit(): void {
-    this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe(() => {
-        const items: MenuItem[] = [{ icon: 'pi pi-home', routerLink: '/' }];
-        this.breadcrumbItems = this.createBreadcrumbs(
-          this.activatedRoute,
-          this.activatedRoute.root,
-          items
-        );
-      });
-  }
 
   private createBreadcrumbs(
     actualroute: ActivatedRoute,
@@ -78,5 +84,17 @@ export class MainLayoutComponent implements OnInit {
     }
 
     return breadcrumbs;
+  }
+
+  private getActualActivatedRoute(
+    activatedRoute: ActivatedRoute
+  ): ActivatedRoute {
+    for (const subRoute of activatedRoute.children) {
+      return subRoute.children.length > 0
+        ? this.getActualActivatedRoute(subRoute)
+        : subRoute;
+    }
+
+    return activatedRoute;
   }
 }
