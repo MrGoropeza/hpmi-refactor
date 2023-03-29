@@ -6,7 +6,10 @@
       class="p-button-info"
       (click)="menu.toggle($event)"
     ></button>
-    <p-breadcrumb class="flex-grow" [model]="breadcrumbItems"></p-breadcrumb>
+    <p-breadcrumb
+      class="flex-grow overflow-x-auto"
+      [model]="breadcrumbItems"
+    ></p-breadcrumb>
     <button
       type="button"
       pButton

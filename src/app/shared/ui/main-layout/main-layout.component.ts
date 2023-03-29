@@ -70,7 +70,7 @@ export class MainLayoutComponent implements OnInit {
       if (!(label === null || label === undefined) && label !== '') {
         if (label !== actualroute.snapshot.data['breadcrumb']) {
           breadcrumbs.push({ label, routerLink: url });
-          console.log(`label: ${label}, routerLink: ${url}`);
+          // console.log(`label: ${label}, routerLink: ${url}`);
         }
       }
 
