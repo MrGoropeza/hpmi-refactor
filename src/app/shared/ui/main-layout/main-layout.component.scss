@@ -1,0 +1,15 @@
+:host ::ng-deep .p-breadcrumb {
+  @apply p-3;
+}
+
+:host ::ng-deep .p-slidemenu {
+  @apply w-auto;
+}
+
+:host ::ng-deep .p-card .p-card-body {
+  @apply h-full;
+}
+
+:host ::ng-deep .p-card .p-card-content {
+  @apply h-full;
+}

@@ -1,0 +1,30 @@
+<div class="flex h-full flex-col gap-1 p-1">
+  <div class="flex w-full gap-1">
+    <button
+      pButton
+      icon="pi pi-bars"
+      class="p-button-info"
+      (click)="menu.toggle($event)"
+    ></button>
+    <p-breadcrumb class="flex-grow" [model]="breadcrumbItems"></p-breadcrumb>
+    <button
+      type="button"
+      pButton
+      icon="pi pi-moon"
+      class="p-button-secondary"
+    ></button>
+  </div>
+
+  <p-card class="flex-grow" styleClass="h-full">
+    <ng-content></ng-content>
+  </p-card>
+</div>
+
+<p-slideMenu
+  #menu
+  [model]="menuItems"
+  [popup]="true"
+  [viewportHeight]="300"
+  [menuWidth]="250"
+  backLabel="Volver"
+></p-slideMenu>
