@@ -2,7 +2,14 @@
 @import "../node_modules/primeng/resources/themes/md-dark-deeppurple/theme.css";
 @import "../node_modules/primeng/resources/primeng.css";
 @import "../node_modules/primeicons/primeicons.css";
+@import "../node_modules/bootstrap-icons/font/bootstrap-icons.css";
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+}
