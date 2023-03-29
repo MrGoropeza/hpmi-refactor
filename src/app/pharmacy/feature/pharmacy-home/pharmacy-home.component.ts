@@ -9,7 +9,6 @@ import { MenuButtonComponent } from 'src/app/shared/ui/menu-button/menu-button.c
   selector: 'app-pharmacy-home',
   standalone: true,
   imports: [CommonModule, MenuButtonComponent],
-  styleUrls: ['./pharmacy-home.component.scss'],
   template: `
     <div class="flex flex-wrap justify-center gap-4">
       <app-menu-button
