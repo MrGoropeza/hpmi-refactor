@@ -8,9 +8,9 @@ export const APP_ROUTES: Routes = [
     path: 'pharmacy',
     data: { breadcrumb: 'Farmacia' },
     loadChildren: () =>
-      import('./pharmacy/feature/pharmacy-shell/pharmacy-shell.module').then(
-        (m) => m.PharmacyShellModule
-      ),
+      import(
+        './pharmacy/feature/pharmacy-routing/pharmacy-routing.module'
+      ).then((m) => m.PharmacyRoutingModule),
   },
 ];
 

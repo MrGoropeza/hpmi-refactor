@@ -11,17 +11,36 @@ export const MENU_CONFIG: MenuItem[] = [
     label: 'Farmacia',
     icon: 'bi bi-bandaid',
     items: [
-      {
-        label: 'Farmacia',
-        disabled: true,
-      },
+      { label: 'Farmacia', disabled: true },
       {
         label: 'Inicio',
         icon: 'pi pi-home',
         routerLink: '/pharmacy',
       },
-      { label: 'Artículos', routerLink: 'pharmacy/articles' },
-      { label: 'Depósitos', routerLink: 'pharmacy/deposits' },
+      {
+        label: 'Artículos',
+        icon: 'bi bi-boxes',
+        routerLink: '/pharmacy/articles',
+      },
+      {
+        label: 'Depósitos',
+        icon: 'bi bi-box-seam',
+        routerLink: '/pharmacy/deposits',
+      },
     ],
   },
 ];
+
+export function getActualMenuItems(
+  routerLink: string,
+  menuConfig: MenuItem[] = MENU_CONFIG
+): MenuItem[] {
+  for (const item of menuConfig) {
+    if (item.routerLink && item.routerLink === routerLink)
+      return menuConfig.slice(2);
+
+    if (item.items) return getActualMenuItems(routerLink, item.items);
+  }
+
+  return [];
+}
