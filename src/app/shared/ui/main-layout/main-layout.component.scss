@@ -11,5 +11,5 @@
 }
 
 :host ::ng-deep .p-card .p-card-content {
-  @apply h-full;
+  @apply max-h-full overflow-y-auto;
 }
