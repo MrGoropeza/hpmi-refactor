@@ -113,7 +113,7 @@
             [showAddButton]="false"
           ></p-columnFilter>
         </th>
-        <th>Acciones</th>
+        <th width="2rem">Acciones</th>
       </tr>
     </ng-template>
 
@@ -123,7 +123,20 @@
         <td>{{ row.description }}</td>
         <td>{{ row.category }}</td>
         <td>{{ row.dueDate | date : "long" }}</td>
-        <td>a</td>
+        <td>
+          <div class="flex gap-1">
+            <button
+              pButton
+              class="p-button-rounded p-button-raised p-button-warning"
+              icon="pi pi-pencil"
+            ></button>
+            <button
+              pButton
+              class="p-button-rounded p-button-raised p-button-danger"
+              icon="pi pi-trash"
+            ></button>
+          </div>
+        </td>
       </tr>
     </ng-template>
   </p-table>
