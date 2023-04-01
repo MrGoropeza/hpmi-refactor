@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { PrimeNGConfig } from 'primeng/api';
+import { primeLanguageES } from './shared/consts/prime-language-ES';
 import { MainLayoutComponent } from './shared/ui/main-layout/main-layout.component';
 
 export const APP_ROUTES: Routes = [
@@ -24,4 +26,10 @@ export const APP_ROUTES: Routes = [
   standalone: true,
   imports: [CommonModule, RouterModule, MainLayoutComponent],
 })
-export class AppComponent {}
+export class AppComponent implements OnInit {
+  constructor(private primeConfig: PrimeNGConfig) {}
+
+  ngOnInit(): void {
+    this.primeConfig.setTranslation(primeLanguageES);
+  }
+}
