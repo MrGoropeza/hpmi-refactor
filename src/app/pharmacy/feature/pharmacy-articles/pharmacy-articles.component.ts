@@ -6,15 +6,12 @@ import { InputTextModule } from 'primeng/inputtext';
 import { MenuModule } from 'primeng/menu';
 import { SpeedDialModule } from 'primeng/speeddial';
 import { TableModule } from 'primeng/table';
+import { BehaviorSubject, Observable, map, skip, switchMap, tap } from 'rxjs';
 import {
-  BehaviorSubject,
-  interval,
-  map,
-  Observable,
-  of,
-  Subject,
-  take,
-} from 'rxjs';
+  MultipleRecordsResponse,
+  PharmacyArticlesService,
+} from '../../data-access/pharmacy-articles.service';
+import { PharmacyArticleModel } from '../../models/pharmacy-article.model';
 
 @Component({
   selector: 'app-pharmacy-articles',
@@ -30,10 +27,18 @@ import {
   ],
 })
 export class PharmacyArticlesComponent {
-  values$ = new Subject<any[]>();
-  totalRecords$: Observable<number> = of(0);
+  refresh$ = new BehaviorSubject<LazyLoadEvent>({});
   loading$ = new BehaviorSubject<boolean>(false);
   deleteDisabled$ = new BehaviorSubject<boolean>(true);
+
+  response$: Observable<MultipleRecordsResponse<PharmacyArticleModel>> =
+    this.refresh$.pipe(
+      skip(1),
+      tap(() => this.loading$.next(true)),
+      switchMap((event) => this.articlesService.listLazy(event)),
+      tap(() => this.loading$.next(false))
+    );
+
   menuItems$: Observable<MenuItem[]> = this.deleteDisabled$.pipe(
     map((deleteDisabled): MenuItem[] => {
       return [
@@ -52,26 +57,5 @@ export class PharmacyArticlesComponent {
     })
   );
 
-  constructor() {}
-
-  onLazyLoad(event: LazyLoadEvent) {
-    console.log(event);
-
-    this.loading$.next(true);
-    interval(1000)
-      .pipe(take(1))
-      .subscribe(() => {
-        this.totalRecords$ = of(10);
-        this.values$.next(
-          Array(10).fill({
-            id: 20,
-            name: 'nombre',
-            description: 'desc',
-            category: 'category',
-            dueDate: Date.now(),
-          })
-        );
-        this.loading$.next(false);
-      });
-  }
+  constructor(private articlesService: PharmacyArticlesService) {}
 }

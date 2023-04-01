@@ -1,91 +1,130 @@
-<p-table
-  #table
-  [paginator]="true"
-  [lazy]="true"
-  [filterDelay]="600"
-  [loading]="(loading$ | async)!"
-  [value]="(values$ | async)!"
-  [totalRecords]="20"
-  [rows]="10"
-  (onLazyLoad)="onLazyLoad($event)"
+<ng-container
+  *ngIf="{
+    response: response$ | async,
+    loading: loading$ | async,
+    deleteDisabled: deleteDisabled$ | async
+  } as vm"
 >
-  <ng-template pTemplate="caption">
-    <div class="flex items-center justify-between">
-      <span class="p-input-icon-left">
-        <i class="pi pi-search"></i>
-        <input
-          type="text"
-          class="p-inputtext-sm"
-          pInputText
-          placeholder="Buscar..."
-          (input)="table.filterGlobal($any($event.target).value, 'contains')"
-        />
-      </span>
+  <p-table
+    #table
+    styleClass="p-datatable-sm p-datatable-striped"
+    sortField="name"
+    [sortOrder]="1"
+    [filterDelay]="600"
+    [rows]="10"
+    [paginator]="true"
+    [lazy]="true"
+    [loading]="vm.loading!"
+    [value]="vm.response?.items!"
+    [totalRecords]="vm.response?.totalItems!"
+    (onLazyLoad)="refresh$.next($event)"
+  >
+    <ng-template pTemplate="caption">
+      <div class="flex items-center justify-between">
+        <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input
+            type="text"
+            class="p-inputtext-sm"
+            pInputText
+            placeholder="Buscar..."
+            (input)="table.filterGlobal($any($event.target).value, 'contains')"
+          />
+        </span>
 
-      <button
-        pButton
-        type="button"
-        icon="pi pi-ellipsis-v"
-        class="p-button-info p-button-rounded md:hidden"
-        (click)="menu.toggle($event)"
-      ></button>
+        <button
+          pButton
+          type="button"
+          icon="pi pi-ellipsis-v"
+          class="p-button-info p-button-rounded md:hidden"
+          (click)="menu.toggle($event)"
+        ></button>
 
-      <div class="hidden gap-2 md:flex">
-        <button
-          type="button"
-          pButton
-          icon="pi pi-plus"
-          label="Agregar"
-          class="p-button-success"
-        ></button>
-        <button
-          type="button"
-          pButton
-          icon="pi pi-trash"
-          label="Borrar"
-          class="p-button-danger"
-          [disabled]="deleteDisabled$ | async"
-        ></button>
+        <div class="hidden gap-2 md:flex">
+          <button
+            type="button"
+            pButton
+            icon="pi pi-plus"
+            label="Agregar"
+            class="p-button-success"
+          ></button>
+          <button
+            type="button"
+            pButton
+            icon="pi pi-trash"
+            label="Borrar"
+            class="p-button-danger"
+            [disabled]="vm.deleteDisabled"
+          ></button>
+        </div>
       </div>
-    </div>
 
-    <p-menu
-      #menu
-      appendTo="body"
-      [model]="(menuItems$ | async)!"
-      [popup]="true"
-    ></p-menu>
-  </ng-template>
+      <p-menu
+        #menu
+        appendTo="body"
+        [model]="(menuItems$ | async)!"
+        [popup]="true"
+      ></p-menu>
+    </ng-template>
 
-  <ng-template pTemplate="header">
-    <tr>
-      <th>ID</th>
-      <th pSortableColumn="name">
-        Nombre
-        <p-sortIcon field="name"></p-sortIcon>
-        <p-columnFilter
-          type="text"
-          field="name"
-          display="menu"
-          [showOperator]="false"
-          [showAddButton]="false"
-        ></p-columnFilter>
-      </th>
-      <th>Descripción</th>
-      <th>Categoría</th>
-      <th>Fecha de Vencimiento</th>
-      <th>Acciones</th>
-    </tr>
-  </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="name">
+          Nombre
+          <p-sortIcon field="name"></p-sortIcon>
+          <p-columnFilter
+            type="text"
+            field="name"
+            display="menu"
+            [showOperator]="false"
+            [showAddButton]="false"
+          ></p-columnFilter>
+        </th>
+        <th pSortableColumn="description">
+          Descripción
+          <p-sortIcon field="description"></p-sortIcon>
+          <p-columnFilter
+            type="text"
+            field="description"
+            display="menu"
+            [showOperator]="false"
+            [showAddButton]="false"
+          ></p-columnFilter>
+        </th>
+        <th pSortableColumn="category">
+          Categoría
+          <p-sortIcon field="category"></p-sortIcon>
+          <p-columnFilter
+            type="numeric"
+            field="category"
+            display="menu"
+            [showOperator]="false"
+            [showAddButton]="false"
+          ></p-columnFilter>
+        </th>
+        <th pSortableColumn="dueDate">
+          Fecha de Vencimiento
+          <p-sortIcon field="dueDate"></p-sortIcon>
+          <p-columnFilter
+            type="date"
+            field="dueDate"
+            display="menu"
+            [showOperator]="false"
+            [showAddButton]="false"
+          ></p-columnFilter>
+        </th>
+        <th>Acciones</th>
+      </tr>
+    </ng-template>
 
-  <ng-template pTemplate="body" let-row>
-    <tr>
-      <td>{{ row.id }}</td>
-      <td>{{ row.name }}</td>
-      <td>{{ row.description }}</td>
-      <td>{{ row.category }}</td>
-      <td>{{ row.dueDate }}</td>
-      <td>a</td>
-    </tr>
-  </ng-template>
-</p-table>
+    <ng-template pTemplate="body" let-row>
+      <tr>
+        <td>{{ row.name }}</td>
+        <td>{{ row.description }}</td>
+        <td>{{ row.category }}</td>
+        <td>{{ row.dueDate | date : "long" }}</td>
+        <td>a</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</ng-container>
