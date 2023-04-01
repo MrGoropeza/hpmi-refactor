@@ -21,7 +21,6 @@ export const APP_ROUTES: Routes = [
       <router-outlet></router-outlet>
     </app-main-layout>
   `,
-  styleUrls: ['./app.component.scss'],
   standalone: true,
   imports: [CommonModule, RouterModule, MainLayoutComponent],
 })
