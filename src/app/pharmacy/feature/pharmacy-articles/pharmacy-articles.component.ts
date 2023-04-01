@@ -29,7 +29,7 @@ import { PharmacyArticleModel } from '../../models/pharmacy-article.model';
 export class PharmacyArticlesComponent {
   refresh$ = new BehaviorSubject<LazyLoadEvent>({});
   loading$ = new BehaviorSubject<boolean>(false);
-  deleteDisabled$ = new BehaviorSubject<boolean>(true);
+  selection$ = new BehaviorSubject<PharmacyArticleModel[]>([]);
 
   response$: Observable<MultipleRecordsResponse<PharmacyArticleModel>> =
     this.refresh$.pipe(
@@ -39,8 +39,8 @@ export class PharmacyArticlesComponent {
       tap(() => this.loading$.next(false))
     );
 
-  menuItems$: Observable<MenuItem[]> = this.deleteDisabled$.pipe(
-    map((deleteDisabled): MenuItem[] => {
+  menuItems$: Observable<MenuItem[]> = this.selection$.pipe(
+    map((selection): MenuItem[] => {
       return [
         {
           icon: 'pi pi-plus',
@@ -50,7 +50,7 @@ export class PharmacyArticlesComponent {
         {
           icon: 'pi pi-trash',
           label: 'Borrar',
-          disabled: deleteDisabled,
+          disabled: selection.length === 0,
           command: () => {},
         },
       ];

@@ -2,7 +2,7 @@
   *ngIf="{
     response: response$ | async,
     loading: loading$ | async,
-    deleteDisabled: deleteDisabled$ | async
+    selection: selection$ | async
   } as vm"
 >
   <p-table
@@ -18,6 +18,7 @@
     [value]="vm.response?.items!"
     [totalRecords]="vm.response?.totalItems!"
     (onLazyLoad)="refresh$.next($event)"
+    (selectionChange)="selection$.next($event)"
   >
     <ng-template pTemplate="caption">
       <div class="flex items-center justify-between">
@@ -54,7 +55,7 @@
             icon="pi pi-trash"
             label="Borrar"
             class="p-button-danger"
-            [disabled]="vm.deleteDisabled"
+            [disabled]="vm.selection?.length === 0"
           ></button>
         </div>
       </div>
@@ -69,6 +70,9 @@
 
     <ng-template pTemplate="header">
       <tr>
+        <th style="width: 4rem">
+          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+        </th>
         <th pSortableColumn="name">
           Nombre
           <p-sortIcon field="name"></p-sortIcon>
@@ -119,6 +123,9 @@
 
     <ng-template pTemplate="body" let-row>
       <tr>
+        <td>
+          <p-tableCheckbox [value]="row"></p-tableCheckbox>
+        </td>
         <td>{{ row.name }}</td>
         <td>{{ row.description }}</td>
         <td>{{ row.category }}</td>
