@@ -1,13 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { CrudTableSortButtonComponent } from '@shared/ui/crud-table-sort-button/crud-table-sort-button.component';
 import {
   CrudTableBodyDirective,
   CrudTableComponent,
   CrudTableHeadersDirective,
 } from '@shared/ui/crud-table/crud-table.component';
-import { ButtonModule } from 'primeng/button';
-import { MenuModule } from 'primeng/menu';
-import { TableModule } from 'primeng/table';
 import { PharmacyArticlesService } from '../../data-access/pharmacy-articles.service';
 import { PharmacyArticlesEditComponent } from './pharmacy-articles-edit.component';
 
@@ -17,12 +15,10 @@ import { PharmacyArticlesEditComponent } from './pharmacy-articles-edit.componen
   templateUrl: './pharmacy-articles.component.html',
   imports: [
     CommonModule,
-    ButtonModule,
-    TableModule,
-    MenuModule,
     CrudTableComponent,
     CrudTableHeadersDirective,
     CrudTableBodyDirective,
+    CrudTableSortButtonComponent,
   ],
 })
 export class PharmacyArticlesComponent {
