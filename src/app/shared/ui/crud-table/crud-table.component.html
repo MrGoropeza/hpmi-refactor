@@ -1,0 +1,116 @@
+<ng-container *ngrxLet="store.vm$ as vm">
+  <p-table
+    #table
+    styleClass="p-datatable-sm p-datatable-striped"
+    sortField="name"
+    [sortOrder]="1"
+    [filterDelay]="600"
+    [rows]="10"
+    [paginator]="true"
+    [lazy]="true"
+    [loading]="vm.loading!"
+    [value]="vm.records!"
+    [totalRecords]="vm.totalRecords!"
+    (onLazyLoad)="store.refresh($event)"
+    (selectionChange)="store.selectionChange($event)"
+  >
+    <ng-template pTemplate="caption">
+      <div class="flex items-center justify-between">
+        <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input
+            type="text"
+            class="p-inputtext-sm"
+            pInputText
+            placeholder="Buscar..."
+            (input)="table.filterGlobal($any($event.target).value, 'contains')"
+          />
+        </span>
+
+        <button
+          pButton
+          type="button"
+          icon="pi pi-ellipsis-v"
+          class="p-button-info p-button-rounded md:hidden"
+          (click)="menu.toggle($event)"
+        ></button>
+
+        <div class="hidden gap-2 md:flex">
+          <button
+            type="button"
+            pButton
+            icon="pi pi-plus"
+            label="Agregar"
+            class="p-button-success"
+            (click)="store.openModal()"
+          ></button>
+          <button
+            type="button"
+            pButton
+            icon="pi pi-trash"
+            label="Borrar"
+            class="p-button-danger"
+            [disabled]="vm.deleteDisabled"
+            (click)="store.deleteSelection()"
+          ></button>
+        </div>
+      </div>
+
+      <p-menu
+        #menu
+        appendTo="body"
+        [model]="vm.menuItems"
+        [popup]="true"
+      ></p-menu>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="20">No hay registros cargados en la base de datos.</td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 4rem">
+          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+        </th>
+
+        <ng-container
+          *ngTemplateOutlet="headersRef; context: { $implicit: table }"
+        ></ng-container>
+
+        <th style="width: 4rem">Acciones</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-row>
+      <tr>
+        <td>
+          <p-tableCheckbox [value]="row"></p-tableCheckbox>
+        </td>
+
+        <ng-container
+          *ngTemplateOutlet="bodyRef; context: { $implicit: row }"
+        ></ng-container>
+
+        <td>
+          <div class="flex gap-1">
+            <button
+              pButton
+              class="p-button-rounded p-button-raised p-button-warning"
+              icon="pi pi-pencil"
+              (click)="store.openModal(row)"
+            ></button>
+            <button
+              pButton
+              class="p-button-rounded p-button-raised p-button-danger"
+              icon="pi pi-trash"
+              (click)="store.delete(row)"
+            ></button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</ng-container>
