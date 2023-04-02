@@ -53,6 +53,18 @@ export class PharmacyArticlesService {
     );
   }
 
+  get(id: string, expand?: string): Observable<PharmacyArticleModel> {
+    return from(this.pbCollection.getOne<PharmacyArticleModel>(id, { expand }));
+  }
+
+  create(data: PharmacyArticleModel): Observable<PharmacyArticleModel> {
+    return from(this.pbCollection.create<PharmacyArticleModel>(data));
+  }
+
+  update(data: PharmacyArticleModel): Observable<PharmacyArticleModel> {
+    return from(this.pbCollection.update<PharmacyArticleModel>(data.id, data));
+  }
+
   listLazy(
     event: LazyLoadEvent
   ): Observable<MultipleRecordsResponse<PharmacyArticleModel>> {
