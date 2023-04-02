@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { CrudTableService } from '@shared/interfaces/crud-service.interface';
+import { RecordsResponse } from '@shared/models/records-response.model';
 import PocketBase, { RecordQueryParams } from 'pocketbase';
 import { FilterMatchMode, FilterMetadata, LazyLoadEvent } from 'primeng/api';
 import { Observable, from } from 'rxjs';
@@ -8,14 +10,6 @@ interface ListOptions {
   page?: number;
   perPage?: number;
   queryParams?: RecordQueryParams;
-}
-
-export interface MultipleRecordsResponse<Model> {
-  page?: number;
-  perPage?: number;
-  totalItems?: number;
-  totalPages?: number;
-  items?: Array<Model>;
 }
 
 const PrimeToPocketBaseMatchModes: { [s: string]: string } = {
@@ -35,15 +29,21 @@ const PrimeToPocketBaseMatchModes: { [s: string]: string } = {
   [FilterMatchMode.DATE_AFTER]: '> "{value}"',
 };
 @Injectable({ providedIn: 'root' })
-export class PharmacyArticlesService {
+export class PharmacyArticlesService
+  implements CrudTableService<PharmacyArticleModel>
+{
   private pbCollection = this.pb.collection('articles');
   searchProperty = 'name';
 
   constructor(private pb: PocketBase) {}
 
+  listAll(): Observable<PharmacyArticleModel[]> {
+    return from(this.pbCollection.getFullList<PharmacyArticleModel>());
+  }
+
   list(
     options: ListOptions
-  ): Observable<MultipleRecordsResponse<PharmacyArticleModel>> {
+  ): Observable<RecordsResponse<PharmacyArticleModel>> {
     return from(
       this.pbCollection.getList<PharmacyArticleModel>(
         options.page ?? 1,
@@ -71,7 +71,7 @@ export class PharmacyArticlesService {
 
   listLazy(
     event: LazyLoadEvent
-  ): Observable<MultipleRecordsResponse<PharmacyArticleModel>> {
+  ): Observable<RecordsResponse<PharmacyArticleModel>> {
     const options: ListOptions = {};
     if (event.first !== undefined && event.rows !== undefined) {
       options.page = event.first / event.rows + 1;
