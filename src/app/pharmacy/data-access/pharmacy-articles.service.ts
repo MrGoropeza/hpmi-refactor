@@ -65,6 +65,10 @@ export class PharmacyArticlesService {
     return from(this.pbCollection.update<PharmacyArticleModel>(data.id, data));
   }
 
+  delete(data: PharmacyArticleModel): Observable<boolean> {
+    return from(this.pbCollection.delete(data.id));
+  }
+
   listLazy(
     event: LazyLoadEvent
   ): Observable<MultipleRecordsResponse<PharmacyArticleModel>> {
