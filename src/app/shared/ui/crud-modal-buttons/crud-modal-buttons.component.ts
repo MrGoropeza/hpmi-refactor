@@ -12,6 +12,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     <div class="mt-6 flex justify-end gap-2">
       <button
         pButton
+        type="button"
         icon="pi pi-times"
         label="Cancelar"
         [loading]="loading"
