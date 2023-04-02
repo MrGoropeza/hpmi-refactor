@@ -1,5 +1,5 @@
 export class PharmacyArticleModel {
-  id?: string;
+  id: string = '';
   created?: Date;
   updated?: Date;
   name?: string;
