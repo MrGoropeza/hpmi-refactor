@@ -57,6 +57,7 @@
             label="Borrar"
             class="p-button-danger"
             [disabled]="vm.selection?.length === 0"
+            (click)="deleteSelection()"
           ></button>
         </div>
       </div>
