@@ -1,0 +1,31 @@
+<ng-container *ngIf="{ loading: loading$ | async } as vm">
+  <form [formGroup]="formGroup" (ngSubmit)="save()">
+    <crud-input-text
+      [formGroup]="formGroup"
+      [disabled]="vm.loading!"
+      name="name"
+      label="Nombre"
+    ></crud-input-text>
+
+    <crud-input-text
+      [formGroup]="formGroup"
+      [disabled]="vm.loading!"
+      name="description"
+      label="Descripción"
+    ></crud-input-text>
+
+    <crud-input-calendar
+      [formGroup]="formGroup"
+      [disabled]="vm.loading!"
+      name="dueDate"
+      label="Fecha de Vencimiento"
+    ></crud-input-calendar>
+
+    <crud-modal-buttons
+      [loading]="vm.loading!"
+      (cancel)="cancel()"
+    ></crud-modal-buttons>
+  </form>
+</ng-container>
+
+<!-- <pre>{{ formGroup.getRawValue() | json }}</pre> -->
