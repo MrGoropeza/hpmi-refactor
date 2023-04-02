@@ -51,7 +51,7 @@
             label="Borrar"
             class="p-button-danger"
             [disabled]="vm.deleteDisabled"
-            (click)="store.deleteSelection()"
+            (click)="deleteSelection()"
           ></button>
         </div>
       </div>
@@ -106,7 +106,7 @@
               pButton
               class="p-button-rounded p-button-raised p-button-danger"
               icon="pi pi-trash"
-              (click)="store.delete(row)"
+              (click)="delete(row)"
             ></button>
           </div>
         </td>

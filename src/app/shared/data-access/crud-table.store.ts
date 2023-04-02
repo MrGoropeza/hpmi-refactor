@@ -13,7 +13,6 @@ import { DialogService } from 'primeng/dynamicdialog';
 import {
   Observable,
   combineLatestWith,
-  concatMap,
   exhaustMap,
   forkJoin,
   switchMap,
@@ -53,7 +52,7 @@ export class CrudTableStore<Model extends BaseModel> extends ComponentStore<
 
   readonly selectionChange = this.effect((rows$: Observable<Model[]>) =>
     rows$.pipe(
-      concatMap((selection) =>
+      switchMap((selection) =>
         this.select((state) => state.menuItems).pipe(
           tap((menuItems) => {
             const deleteOptionIndex = menuItems.findIndex(
@@ -87,7 +86,7 @@ export class CrudTableStore<Model extends BaseModel> extends ComponentStore<
 
   readonly openModal = this.effect((row$: Observable<Model | void>) =>
     row$.pipe(
-      exhaustMap(
+      switchMap(
         (row) =>
           this.dialogService.open(this.modalComponent, {
             closeOnEscape: false,
@@ -103,23 +102,7 @@ export class CrudTableStore<Model extends BaseModel> extends ComponentStore<
     )
   );
 
-  delete(row: Model) {
-    this.confirmationService.confirm({
-      header: `Eliminar Registro`,
-      message: '¿Estás seguro de eliminar el registro?',
-      accept: () => this.deleteEffect(row),
-    });
-  }
-
-  deleteSelection() {
-    this.confirmationService.confirm({
-      header: `Eliminar registros`,
-      message: '¿Estás seguro que querés eliminar los registros?',
-      accept: () => this.deleteSelectionEffect(),
-    });
-  }
-
-  private readonly deleteEffect = this.effect((row$: Observable<Model>) =>
+  readonly deleteEffect = this.effect((row$: Observable<Model>) =>
     row$.pipe(
       exhaustMap((row) => {
         this.patchState({ loading: true });
@@ -138,15 +121,18 @@ export class CrudTableStore<Model extends BaseModel> extends ComponentStore<
     )
   );
 
-  private readonly deleteSelectionEffect = this.effect<void>((trigger$) =>
+  readonly deleteSelectionEffect = this.effect((trigger$) =>
     trigger$.pipe(
       exhaustMap(() => this.select((state) => state.selection)),
       switchMap((rows) => {
-        this.patchState({ selection: [] });
+        this.patchState({ loading: true });
         return forkJoin(rows.map((selected) => this.service.delete(selected)));
       }),
       tapResponse(
-        () => this.success('Registros borrados con éxito.'),
+        () => {
+          this.success('Registros borrados con éxito.');
+          this.patchState({ selection: [] });
+        },
         () => this.error('Error al borrar los registros. Intentá de nuevo.')
       ),
       tap(() => this.refresh(this.select((state) => state.refresh)))

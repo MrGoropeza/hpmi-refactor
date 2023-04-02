@@ -13,6 +13,7 @@ import { provideComponentStore } from '@ngrx/component-store';
 import { CrudTableStore } from '@shared/data-access/crud-table.store';
 import { CrudTableService } from '@shared/interfaces/crud-service.interface';
 import { BaseModel } from '@shared/models/base.model';
+import { ConfirmationService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { MenuModule } from 'primeng/menu';
@@ -70,7 +71,10 @@ export class CrudTableComponent<Model extends BaseModel> implements OnInit {
   @Input() modalComponent!: Type<any>;
   @Input() service!: CrudTableService<Model>;
 
-  constructor(protected readonly store: CrudTableStore<Model>) {}
+  constructor(
+    protected readonly store: CrudTableStore<Model>,
+    private confirmationService: ConfirmationService
+  ) {}
 
   ngOnInit(): void {
     this.store.modalComponent = this.modalComponent;
@@ -89,12 +93,28 @@ export class CrudTableComponent<Model extends BaseModel> implements OnInit {
           icon: 'pi pi-trash',
           label: 'Borrar',
           disabled: true,
-          command: () => this.store.deleteSelection(),
+          command: () => this.deleteSelection(),
         },
       ],
       refresh: {},
       response: {},
       selection: [],
+    });
+  }
+
+  delete(row: Model) {
+    this.confirmationService.confirm({
+      header: `Eliminar Registro`,
+      message: '¿Estás seguro de eliminar el registro?',
+      accept: () => this.store.deleteEffect(row),
+    });
+  }
+
+  deleteSelection() {
+    this.confirmationService.confirm({
+      header: `Eliminar registros`,
+      message: '¿Estás seguro que querés eliminar los registros?',
+      accept: () => this.store.deleteSelectionEffect(),
     });
   }
 }
