@@ -2,16 +2,25 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { LazyLoadEvent, MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
+import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { MenuModule } from 'primeng/menu';
-import { SpeedDialModule } from 'primeng/speeddial';
 import { TableModule } from 'primeng/table';
-import { BehaviorSubject, Observable, map, skip, switchMap, tap } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  map,
+  skip,
+  switchMap,
+  take,
+  tap,
+} from 'rxjs';
 import {
   MultipleRecordsResponse,
   PharmacyArticlesService,
 } from '../../data-access/pharmacy-articles.service';
 import { PharmacyArticleModel } from '../../models/pharmacy-article.model';
+import { PharmacyArticlesEditComponent } from './pharmacy-articles-edit.component';
 
 @Component({
   selector: 'app-pharmacy-articles',
@@ -22,8 +31,8 @@ import { PharmacyArticleModel } from '../../models/pharmacy-article.model';
     ButtonModule,
     InputTextModule,
     TableModule,
-    SpeedDialModule,
     MenuModule,
+    DynamicDialogModule,
   ],
 })
 export class PharmacyArticlesComponent {
@@ -43,11 +52,13 @@ export class PharmacyArticlesComponent {
     map((selection): MenuItem[] => {
       return [
         {
+          id: 'create',
           icon: 'pi pi-plus',
           label: 'Agregar',
-          command: () => {},
+          command: () => this.openModal(),
         },
         {
+          id: 'deleteMultiple',
           icon: 'pi pi-trash',
           label: 'Borrar',
           disabled: selection.length === 0,
@@ -57,5 +68,23 @@ export class PharmacyArticlesComponent {
     })
   );
 
-  constructor(private articlesService: PharmacyArticlesService) {}
+  constructor(
+    private articlesService: PharmacyArticlesService,
+    private dialogService: DialogService
+  ) {}
+
+  openModal(row?: PharmacyArticleModel) {
+    const modal = this.dialogService.open(PharmacyArticlesEditComponent, {
+      closeOnEscape: false,
+      closable: false,
+      header: row ? `Editar ${row.name}` : 'Agregar Artículo',
+      data: row ? { id: row.id } : undefined,
+    });
+
+    modal.onClose.pipe(take(1)).subscribe((result) => {
+      if (result) this.refresh$.next(this.refresh$.value);
+    });
+  }
+
+  delete(row: PharmacyArticleModel) {}
 }
