@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { getActualMenuItems } from 'src/app/shared/config/menu.config';
@@ -18,12 +18,7 @@ import { MenuButtonComponent } from 'src/app/shared/ui/menu-button/menu-button.c
     </div>
   `,
 })
-export class PharmacyHomeComponent implements OnInit {
-  menuItems: MenuItem[] = [];
-
+export class PharmacyHomeComponent {
+  menuItems: MenuItem[] = getActualMenuItems(this.router.url);
   constructor(private router: Router) {}
-
-  ngOnInit(): void {
-    this.menuItems = getActualMenuItems(this.router.url);
-  }
 }
