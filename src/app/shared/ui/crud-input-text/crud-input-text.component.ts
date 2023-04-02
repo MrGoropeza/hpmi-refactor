@@ -2,8 +2,10 @@ import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
-import { CrudErrorMessage } from '../../consts/crud-error-message.model';
-import { CrudErrorMessagePipe } from '../../pipes/crud-error-message.pipe';
+import {
+  CrudErrorMessage,
+  CrudErrorMessagePipe,
+} from '../../pipes/crud-error-message.pipe';
 
 @Component({
   selector: 'crud-input-text',
