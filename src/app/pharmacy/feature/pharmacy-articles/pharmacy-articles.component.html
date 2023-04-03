@@ -1,22 +1,37 @@
 <crud-table [modalComponent]="modalComponent" [service]="articlesService">
   <ng-template CrudTableHeaders let-table>
-    <th>
-      <div class="flex items-center">
-        Nombre
-        <crud-table-sort-button [table]="table" field="name" />
-      </div>
+    <th pSortableColumn="name">
+      Nombre
+      <p-sortIcon field="name"></p-sortIcon>
+      <p-columnFilter
+        type="text"
+        field="name"
+        display="menu"
+        [showOperator]="false"
+        [showAddButton]="false"
+      ></p-columnFilter>
     </th>
-    <th>
-      <div class="flex items-center">
-        Descripción
-        <crud-table-sort-button [table]="table" field="description" />
-      </div>
+    <th pSortableColumn="description">
+      Descripción
+      <p-sortIcon field="description"></p-sortIcon>
+      <p-columnFilter
+        type="text"
+        field="description"
+        display="menu"
+        [showOperator]="false"
+        [showAddButton]="false"
+      ></p-columnFilter>
     </th>
-    <th>
-      <div class="flex items-center">
-        Fecha de Vencimiento
-        <crud-table-sort-button [table]="table" field="dueDate" />
-      </div>
+    <th pSortableColumn="dueDate">
+      Fecha de Vencimiento
+      <p-sortIcon field="dueDate"></p-sortIcon>
+      <p-columnFilter
+        type="date"
+        field="dueDate"
+        display="menu"
+        [showOperator]="false"
+        [showAddButton]="false"
+      ></p-columnFilter>
     </th>
   </ng-template>
 
