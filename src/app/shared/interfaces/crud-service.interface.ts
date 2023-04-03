@@ -3,7 +3,6 @@ import { LazyLoadEvent } from 'primeng/api';
 import { Observable } from 'rxjs';
 
 export interface CrudTableService<Model> {
-  // list(page: number, perPage: number): Observable<RecordsResponse<Model>>;
   listAll(): Observable<Model[]>;
   listLazy(event: LazyLoadEvent): Observable<RecordsResponse<Model>>;
   get(id: string): Observable<Model>;
