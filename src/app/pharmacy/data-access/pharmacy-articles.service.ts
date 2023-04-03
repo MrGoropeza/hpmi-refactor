@@ -91,7 +91,7 @@ export class PharmacyArticlesService
       for (const filter of Object.entries(event.filters)) {
         const buildedFilter = this.buildPocketBaseFilter(
           filter[0],
-          filter[1] as FilterMetadata[]
+          filter[1] instanceof Array ? filter[1] : [filter[1]]
         );
         if (queryParams['filter'] === '') {
           queryParams['filter'] += buildedFilter;

@@ -76,7 +76,8 @@ export class CrudTableStore<Model extends BaseModel> extends ComponentStore<
       }),
       tapResponse(
         (response) => this.patchState({ response, loading: false }),
-        () => {
+        (e) => {
+          console.error(e);
           this.error('Error cargando los registros. Recargá la página.');
           this.patchState({ loading: false });
         }
