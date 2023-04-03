@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import {
-  AfterViewInit,
   Component,
   ContentChild,
   Directive,
@@ -64,9 +63,7 @@ export class CrudTableBodyDirective<Model extends BaseModel> {
   providers: [provideComponentStore(CrudTableStore)],
   templateUrl: './crud-table.component.html',
 })
-export class CrudTableComponent<Model extends BaseModel>
-  implements OnInit, AfterViewInit
-{
+export class CrudTableComponent<Model extends BaseModel> implements OnInit {
   @ContentChild(CrudTableHeadersDirective, { read: TemplateRef })
   headersRef!: TemplateRef<any>;
 
@@ -78,16 +75,14 @@ export class CrudTableComponent<Model extends BaseModel>
   @Input() modalComponent!: Type<any>;
   @Input() service!: CrudTableService<Model>;
 
-  headersInjector!: Injector;
-
   constructor(
     protected readonly store: CrudTableStore<Model>,
     private confirmationService: ConfirmationService
   ) {}
 
-  ngAfterViewInit(): void {
-    this.headersInjector = Injector.create({
-      providers: [{ provide: Table, useValue: this.table }],
+  buildTableInjector(table: Table): Injector {
+    return Injector.create({
+      providers: [{ provide: Table, useValue: table }],
     });
   }
 
