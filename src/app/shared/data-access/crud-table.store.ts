@@ -5,14 +5,7 @@ import { BaseModel } from '@shared/models/base.model';
 import { RecordsResponse } from '@shared/models/records-response.model';
 import { LazyLoadEvent, MenuItem, MessageService } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
-import {
-  Observable,
-  combineLatestWith,
-  exhaustMap,
-  forkJoin,
-  switchMap,
-  tap,
-} from 'rxjs';
+import { Observable, exhaustMap, forkJoin, switchMap, tap } from 'rxjs';
 
 export interface CrudTableState<Model> {
   menuItems: MenuItem[];
@@ -66,16 +59,18 @@ export class CrudTableStore<Model extends BaseModel> extends ComponentStore<
     event$.pipe(
       switchMap((event) => {
         this.patchState({ loading: true });
-        return this.service.listLazy(event);
-      }),
-      tapResponse(
-        (response) => this.patchState({ response, loading: false }),
-        (e) => {
-          console.error(e);
-          this.error('Error cargando los registros. Recargá la página.');
-          this.patchState({ loading: false });
-        }
-      )
+        return this.service.listLazy(event).pipe(
+          tapResponse(
+            (response) =>
+              this.patchState({ response, loading: false, refresh: event }),
+            (e) => {
+              console.error(e);
+              this.error('Error cargando los registros. Recargá la página.');
+              this.patchState({ loading: false });
+            }
+          )
+        );
+      })
     )
   );
 
@@ -90,9 +85,8 @@ export class CrudTableStore<Model extends BaseModel> extends ComponentStore<
             data: row ? { id: row.id } : undefined,
           }).onClose
       ),
-      combineLatestWith(this.select((state) => state.refresh)),
-      tap(([result, refresh]) => {
-        if (result) this.refresh(refresh);
+      tap((result) => {
+        if (result) this.refresh(this.select((state) => state.refresh));
       })
     )
   );
