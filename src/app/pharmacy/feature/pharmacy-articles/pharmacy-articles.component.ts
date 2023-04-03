@@ -7,6 +7,7 @@ import {
 } from '@shared/ui/crud-table/crud-table.component';
 import { Table, TableModule, TableService } from 'primeng/table';
 import { PharmacyArticlesService } from '../../data-access/pharmacy-articles.service';
+import { PharmacyArticleModel } from '../../models/pharmacy-article.model';
 import { PharmacyArticlesEditComponent } from './pharmacy-articles-edit.component';
 
 @Component({
@@ -24,5 +25,6 @@ import { PharmacyArticlesEditComponent } from './pharmacy-articles-edit.componen
 })
 export class PharmacyArticlesComponent {
   modalComponent = PharmacyArticlesEditComponent;
+  model = new PharmacyArticleModel();
   constructor(protected articlesService: PharmacyArticlesService) {}
 }

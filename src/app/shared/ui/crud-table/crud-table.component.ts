@@ -41,6 +41,8 @@ interface CrudTableBodyContext<Model extends BaseModel> {
 
 @Directive({ selector: 'ng-template[CrudTableBody]', standalone: true })
 export class CrudTableBodyDirective<Model extends BaseModel> {
+  @Input('CrudTableBody') model!: Model;
+
   static ngTemplateContextGuard<Model extends BaseModel>(
     dir: CrudTableBodyDirective<Model>,
     ctx: unknown

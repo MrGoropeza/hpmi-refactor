@@ -35,7 +35,7 @@
     </th>
   </ng-template>
 
-  <ng-template CrudTableBody let-row>
+  <ng-template [CrudTableBody]="model" let-row>
     <td>{{ row.name }}</td>
     <td>{{ row.description }}</td>
     <td>{{ row.dueDate | date : "dd/MM/yyyy" }}</td>
