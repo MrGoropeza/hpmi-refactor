@@ -1,37 +1,43 @@
 <crud-table [modalComponent]="modalComponent" [service]="articlesService">
   <ng-template CrudTableHeaders let-table>
     <th pSortableColumn="name">
-      Nombre
-      <p-sortIcon field="name"></p-sortIcon>
-      <p-columnFilter
-        type="text"
-        field="name"
-        display="menu"
-        [showOperator]="false"
-        [showAddButton]="false"
-      ></p-columnFilter>
+      <div class="flex items-center">
+        Nombre
+        <p-sortIcon field="name"></p-sortIcon>
+        <p-columnFilter
+          type="text"
+          field="name"
+          display="menu"
+          [showOperator]="false"
+          [showAddButton]="false"
+        ></p-columnFilter>
+      </div>
     </th>
     <th pSortableColumn="description">
-      Descripción
-      <p-sortIcon field="description"></p-sortIcon>
-      <p-columnFilter
-        type="text"
-        field="description"
-        display="menu"
-        [showOperator]="false"
-        [showAddButton]="false"
-      ></p-columnFilter>
+      <div class="flex items-center">
+        Descripción
+        <p-sortIcon field="description"></p-sortIcon>
+        <p-columnFilter
+          type="text"
+          field="description"
+          display="menu"
+          [showOperator]="false"
+          [showAddButton]="false"
+        ></p-columnFilter>
+      </div>
     </th>
     <th pSortableColumn="dueDate">
-      Fecha de Vencimiento
-      <p-sortIcon field="dueDate"></p-sortIcon>
-      <p-columnFilter
-        type="date"
-        field="dueDate"
-        display="menu"
-        [showOperator]="false"
-        [showAddButton]="false"
-      ></p-columnFilter>
+      <div class="flex items-center">
+        Fecha de Vencimiento
+        <p-sortIcon field="dueDate"></p-sortIcon>
+        <p-columnFilter
+          type="date"
+          field="dueDate"
+          display="menu"
+          [showOperator]="false"
+          [showAddButton]="false"
+        ></p-columnFilter>
+      </div>
     </th>
   </ng-template>
 
