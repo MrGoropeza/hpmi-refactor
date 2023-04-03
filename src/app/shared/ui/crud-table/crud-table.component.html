@@ -80,7 +80,9 @@
         </th>
 
         <ng-container
-          *ngTemplateOutlet="headersRef; context: { $implicit: table }"
+          [ngTemplateOutlet]="headersRef"
+          [ngTemplateOutletContext]="{ $implicit: table }"
+          [ngTemplateOutletInjector]="headersInjector!"
         ></ng-container>
 
         <th style="width: 8rem">Acciones</th>

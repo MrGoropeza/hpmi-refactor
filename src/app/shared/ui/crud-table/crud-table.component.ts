@@ -1,12 +1,15 @@
 import { CommonModule } from '@angular/common';
 import {
+  AfterViewInit,
   Component,
   ContentChild,
   Directive,
+  Injector,
   Input,
   OnInit,
   TemplateRef,
   Type,
+  ViewChild,
 } from '@angular/core';
 import { LetModule } from '@ngrx/component';
 import { provideComponentStore } from '@ngrx/component-store';
@@ -61,20 +64,32 @@ export class CrudTableBodyDirective<Model extends BaseModel> {
   providers: [provideComponentStore(CrudTableStore)],
   templateUrl: './crud-table.component.html',
 })
-export class CrudTableComponent<Model extends BaseModel> implements OnInit {
+export class CrudTableComponent<Model extends BaseModel>
+  implements OnInit, AfterViewInit
+{
   @ContentChild(CrudTableHeadersDirective, { read: TemplateRef })
   headersRef!: TemplateRef<any>;
 
   @ContentChild(CrudTableBodyDirective<Model>, { read: TemplateRef })
   bodyRef!: TemplateRef<any>;
 
+  @ViewChild('table') table!: Table;
+
   @Input() modalComponent!: Type<any>;
   @Input() service!: CrudTableService<Model>;
+
+  headersInjector!: Injector;
 
   constructor(
     protected readonly store: CrudTableStore<Model>,
     private confirmationService: ConfirmationService
   ) {}
+
+  ngAfterViewInit(): void {
+    this.headersInjector = Injector.create({
+      providers: [{ provide: Table, useValue: this.table }],
+    });
+  }
 
   ngOnInit(): void {
     this.store.modalComponent = this.modalComponent;
