@@ -2,13 +2,18 @@
   <p-table
     #table
     styleClass="p-datatable-sm p-datatable-striped"
+    currentPageReportTemplate="pág. {currentPage} de {totalPages}"
+    paginatorDropdownAppendTo="body"
+    [rowsPerPageOptions]="[5, 10, 20]"
+    [rows]="5"
     [filterDelay]="600"
-    [rows]="10"
+    [showCurrentPageReport]="true"
+    [showJumpToPageInput]="true"
     [paginator]="true"
     [lazy]="true"
-    [loading]="vm.loading!"
-    [value]="vm.records!"
-    [totalRecords]="vm.totalRecords!"
+    [loading]="vm.loading"
+    [value]="vm.records ?? []"
+    [totalRecords]="vm.totalRecords ?? 0"
     (onLazyLoad)="store.refresh($event)"
     (selectionChange)="store.selectionChange($event)"
   >
