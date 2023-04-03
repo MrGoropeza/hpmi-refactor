@@ -3,12 +3,7 @@ import { ComponentStore, tapResponse } from '@ngrx/component-store';
 import { CrudTableService } from '@shared/interfaces/crud-service.interface';
 import { BaseModel } from '@shared/models/base.model';
 import { RecordsResponse } from '@shared/models/records-response.model';
-import {
-  ConfirmationService,
-  LazyLoadEvent,
-  MenuItem,
-  MessageService,
-} from 'primeng/api';
+import { LazyLoadEvent, MenuItem, MessageService } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
 import {
   Observable,
@@ -44,8 +39,7 @@ export class CrudTableStore<Model extends BaseModel> extends ComponentStore<
 
   constructor(
     private dialogService: DialogService,
-    private messageService: MessageService,
-    private confirmationService: ConfirmationService
+    private messageService: MessageService
   ) {
     super();
   }
