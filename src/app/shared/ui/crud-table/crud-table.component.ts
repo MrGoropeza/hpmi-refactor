@@ -3,18 +3,17 @@ import {
   Component,
   ContentChild,
   Directive,
-  Injector,
   Input,
   OnInit,
   TemplateRef,
   Type,
-  ViewChild,
 } from '@angular/core';
 import { LetModule } from '@ngrx/component';
 import { provideComponentStore } from '@ngrx/component-store';
 import { CrudTableStore } from '@shared/data-access/crud-table.store';
 import { CrudTableService } from '@shared/interfaces/crud-service.interface';
 import { BaseModel } from '@shared/models/base.model';
+import { CrudTableInjectorPipe } from '@shared/pipes/crud-table-injector.pipe';
 import { ConfirmationService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -61,6 +60,7 @@ export class CrudTableBodyDirective<Model extends BaseModel> {
     InputTextModule,
     TableModule,
     MenuModule,
+    CrudTableInjectorPipe,
   ],
   providers: [provideComponentStore(CrudTableStore)],
   templateUrl: './crud-table.component.html',
@@ -72,8 +72,6 @@ export class CrudTableComponent<Model extends BaseModel> implements OnInit {
   @ContentChild(CrudTableBodyDirective<Model>, { read: TemplateRef })
   bodyRef!: TemplateRef<any>;
 
-  @ViewChild('table') table!: Table;
-
   @Input() modalComponent!: Type<any>;
   @Input() service!: CrudTableService<Model>;
 
@@ -81,12 +79,6 @@ export class CrudTableComponent<Model extends BaseModel> implements OnInit {
     protected readonly store: CrudTableStore<Model>,
     private confirmationService: ConfirmationService
   ) {}
-
-  buildTableInjector(table: Table): Injector {
-    return Injector.create({
-      providers: [{ provide: Table, useValue: table }],
-    });
-  }
 
   ngOnInit(): void {
     this.store.modalComponent = this.modalComponent;
