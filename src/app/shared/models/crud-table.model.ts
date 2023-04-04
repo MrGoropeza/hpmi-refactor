@@ -11,8 +11,6 @@ export class CrudTableModel {
       this.constructor,
       modelIdentityMetadataKey
     );
-    console.log(key);
-
     return key ? (this as any)[key] : '';
   }
 
