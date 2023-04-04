@@ -1,9 +1,9 @@
 import { CrudTableService } from '@shared/interfaces/crud-service.interface';
-import { BaseModel } from '@shared/models/base.model';
+import { CrudTableModel } from '@shared/models/crud-table.model';
 import { RecordsResponse } from '@shared/models/records-response.model';
 import PocketBase, { RecordQueryParams } from 'pocketbase';
 import { FilterMatchMode, FilterMetadata, LazyLoadEvent } from 'primeng/api';
-import { Observable, from } from 'rxjs';
+import { Observable, from, map } from 'rxjs';
 
 interface ListOptions {
   page?: number;
@@ -28,9 +28,10 @@ const PrimeToPocketBaseMatchModes: { [s: string]: string } = {
   [FilterMatchMode.DATE_AFTER]: '> "{value}"',
 };
 
-export abstract class PocketBaseCrudService<Model extends BaseModel>
+export abstract class PocketBaseCrudService<Model extends CrudTableModel>
   implements CrudTableService<Model>
 {
+  modelClass = CrudTableModel;
   protected pbCollection = this.pb.collection(this.collectionName);
 
   constructor(
@@ -46,11 +47,22 @@ export abstract class PocketBaseCrudService<Model extends BaseModel>
         options.perPage ?? 30,
         options.queryParams ?? {}
       )
+    ).pipe(
+      map((response) => {
+        response.items = response.items.map((item) =>
+          Object.assign(new this.modelClass(), item)
+        );
+        return response;
+      })
     );
   }
 
   listAll(): Observable<Model[]> {
-    return from(this.pbCollection.getFullList<Model>());
+    return from(this.pbCollection.getFullList<Model>()).pipe(
+      map((items) =>
+        items.map((item) => Object.assign(new this.modelClass(), item))
+      )
+    );
   }
 
   listLazy(event: LazyLoadEvent): Observable<RecordsResponse<Model>> {
@@ -88,19 +100,25 @@ export abstract class PocketBaseCrudService<Model extends BaseModel>
   }
 
   get(id: string, expand?: string): Observable<Model> {
-    return from(this.pbCollection.getOne<Model>(id, { expand }));
+    return from(this.pbCollection.getOne<Model>(id, { expand })).pipe(
+      map((value) => Object.assign(new this.modelClass(), value))
+    );
   }
 
   create(data: Model): Observable<Model> {
-    return from(this.pbCollection.create<Model>(data));
+    return from(this.pbCollection.create<Model>(data)).pipe(
+      map((value) => Object.assign(new this.modelClass(), value))
+    );
   }
 
   update(data: Model): Observable<Model> {
-    return from(this.pbCollection.update<Model>(data.id, data));
+    return from(this.pbCollection.update<Model>(data.Identity, data)).pipe(
+      map((value) => Object.assign(new this.modelClass(), value))
+    );
   }
 
   delete(data: Model): Observable<boolean> {
-    return from(this.pbCollection.delete(data.id));
+    return from(this.pbCollection.delete(data.Identity));
   }
 
   private buildPocketBaseFilter(

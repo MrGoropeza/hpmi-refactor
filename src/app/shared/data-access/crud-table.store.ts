@@ -1,7 +1,11 @@
 import { Injectable, Type } from '@angular/core';
-import { ComponentStore, tapResponse } from '@ngrx/component-store';
+import {
+  ComponentStore,
+  OnStateInit,
+  tapResponse,
+} from '@ngrx/component-store';
 import { CrudTableService } from '@shared/interfaces/crud-service.interface';
-import { BaseModel } from '@shared/models/base.model';
+import { CrudTableModel } from '@shared/models/crud-table.model';
 import { RecordsResponse } from '@shared/models/records-response.model';
 import { LazyLoadEvent, MenuItem, MessageService } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
@@ -16,9 +20,10 @@ export interface CrudTableState<Model> {
 }
 
 @Injectable()
-export class CrudTableStore<Model extends BaseModel> extends ComponentStore<
-  CrudTableState<Model>
-> {
+export class CrudTableStore<Model extends CrudTableModel>
+  extends ComponentStore<CrudTableState<Model>>
+  implements OnStateInit
+{
   readonly vm$ = this.select((state) => ({
     records: state.response.items,
     totalRecords: state.response.totalItems,
@@ -29,12 +34,16 @@ export class CrudTableStore<Model extends BaseModel> extends ComponentStore<
 
   public service!: CrudTableService<Model>;
   public modalComponent!: Type<any>;
+  model!: CrudTableModel;
 
   constructor(
     private dialogService: DialogService,
     private messageService: MessageService
   ) {
     super();
+  }
+  ngrxOnStateInit() {
+    this.model = new this.service.modelClass();
   }
 
   readonly selectionChange = this.effect((rows$: Observable<Model[]>) =>
@@ -81,8 +90,10 @@ export class CrudTableStore<Model extends BaseModel> extends ComponentStore<
           this.dialogService.open(this.modalComponent, {
             closeOnEscape: false,
             closable: false,
-            header: row ? `Editar Registro` : 'Crear Registro',
-            data: row ? { id: row.id } : undefined,
+            header: `${
+              row ? `Editar "${row.Label}"` : `Crear "${this.model.modelName}"`
+            }`,
+            data: row ? { id: row.Identity } : undefined,
           }).onClose
       ),
       tap((result) => {
@@ -95,18 +106,19 @@ export class CrudTableStore<Model extends BaseModel> extends ComponentStore<
     row$.pipe(
       exhaustMap((row) => {
         this.patchState({ loading: true });
-        return this.service.delete(row);
-      }),
-      tapResponse(
-        () => {
-          this.success('Registro borrado con éxito');
-          this.refresh(this.select((state) => state.refresh));
-        },
-        () => {
-          this.error('Error al borrar el registro. Intentá de nuevo.');
-          this.patchState({ loading: false });
-        }
-      )
+        return this.service.delete(row).pipe(
+          tapResponse(
+            () => {
+              this.success(`"${row.Label}" borrado con éxito`);
+              this.refresh(this.select((state) => state.refresh));
+            },
+            () => {
+              this.error(`Error al borrar "${row.Label}". Intentá de nuevo.`);
+              this.patchState({ loading: false });
+            }
+          )
+        );
+      })
     )
   );
 
@@ -119,10 +131,13 @@ export class CrudTableStore<Model extends BaseModel> extends ComponentStore<
       }),
       tapResponse(
         () => {
-          this.success('Registros borrados con éxito.');
+          this.success(`${this.model.pluralName} borrados con éxito.`);
           this.patchState({ selection: [] });
         },
-        () => this.error('Error al borrar los registros. Intentá de nuevo.')
+        () =>
+          this.error(
+            `Error borrando "${this.model.pluralName}". Intentá de nuevo.`
+          )
       ),
       tap(() => this.refresh(this.select((state) => state.refresh)))
     )

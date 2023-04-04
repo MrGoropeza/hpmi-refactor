@@ -12,7 +12,7 @@ import { LetModule } from '@ngrx/component';
 import { provideComponentStore } from '@ngrx/component-store';
 import { CrudTableStore } from '@shared/data-access/crud-table.store';
 import { CrudTableService } from '@shared/interfaces/crud-service.interface';
-import { BaseModel } from '@shared/models/base.model';
+import { CrudTableModel } from '@shared/models/crud-table.model';
 import { CrudTableInjectorPipe } from '@shared/pipes/crud-table-injector.pipe';
 import { ConfirmationService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -34,15 +34,15 @@ export class CrudTableHeadersDirective {
   }
 }
 
-interface CrudTableBodyContext<Model extends BaseModel> {
+interface CrudTableBodyContext<Model extends CrudTableModel> {
   $implicit: Model;
 }
 
 @Directive({ selector: 'ng-template[CrudTableBody]', standalone: true })
-export class CrudTableBodyDirective<Model extends BaseModel> {
+export class CrudTableBodyDirective<Model extends CrudTableModel> {
   @Input('CrudTableBody') model!: Model;
 
-  static ngTemplateContextGuard<Model extends BaseModel>(
+  static ngTemplateContextGuard<Model extends CrudTableModel>(
     dir: CrudTableBodyDirective<Model>,
     ctx: unknown
   ): ctx is CrudTableBodyContext<Model> {
@@ -65,7 +65,9 @@ export class CrudTableBodyDirective<Model extends BaseModel> {
   providers: [provideComponentStore(CrudTableStore)],
   templateUrl: './crud-table.component.html',
 })
-export class CrudTableComponent<Model extends BaseModel> implements OnInit {
+export class CrudTableComponent<Model extends CrudTableModel>
+  implements OnInit
+{
   @ContentChild(CrudTableHeadersDirective, { read: TemplateRef })
   headersRef!: TemplateRef<any>;
 
