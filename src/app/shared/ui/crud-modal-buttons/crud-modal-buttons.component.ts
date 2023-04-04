@@ -13,6 +13,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
       <button
         pButton
         type="button"
+        class="p-button-danger"
         icon="pi pi-times"
         label="Cancelar"
         [loading]="loading"
@@ -21,6 +22,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
       <button
         pButton
         type="submit"
+        class="p-button-success"
         icon="pi pi-save"
         label="Guardar"
         [loading]="loading"
