@@ -7,5 +7,6 @@ import { PharmacyArticleModel } from '../models/pharmacy-article.model';
 export class PharmacyArticlesService extends PocketBaseCrudService<PharmacyArticleModel> {
   constructor(pb: PocketBase) {
     super(pb, 'articles', 'name');
+    this.modelClass = PharmacyArticleModel;
   }
 }
