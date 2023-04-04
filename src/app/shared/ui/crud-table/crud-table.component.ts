@@ -110,16 +110,17 @@ export class CrudTableComponent<Model extends CrudTableModel>
 
   delete(row: Model) {
     this.confirmationService.confirm({
-      header: `Eliminar Registro`,
+      header: `Eliminar "${row.Label}"`,
       message: '¿Estás seguro de eliminar el registro?',
       accept: () => this.store.deleteEffect(row),
     });
   }
 
   deleteSelection() {
+    const model = new this.service.modelClass();
     this.confirmationService.confirm({
-      header: `Eliminar registros`,
-      message: '¿Estás seguro que querés eliminar los registros?',
+      header: `Eliminar varios ${model.pluralName}`,
+      message: '¿Estás seguro que querés eliminarlos?',
       accept: () => this.store.deleteSelectionEffect(),
     });
   }
