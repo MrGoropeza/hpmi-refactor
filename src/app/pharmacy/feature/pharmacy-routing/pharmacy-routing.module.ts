@@ -20,6 +20,15 @@ const routes: Routes = [
         (c) => c.PharmacyArticlesComponent
       ),
   },
+  {
+    path: 'article-categories',
+    title: 'Categorías de Artículos',
+    data: { breadcrumb: 'Categorías de Artículos' },
+    loadComponent: () =>
+      import(
+        '../pharmacy-article-categories/pharmacy-article-categories.component'
+      ).then((c) => c.PharmacyArticleCategoriesComponent),
+  },
 ];
 
 @NgModule({

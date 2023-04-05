@@ -1,0 +1,21 @@
+<crud-table [modalComponent]="modalComponent" [service]="service">
+  <ng-template CrudTableHeaders let-table>
+    <th pSortableColumn="name">
+      <div class="flex items-center">
+        Nombre
+        <p-sortIcon field="name"></p-sortIcon>
+        <p-columnFilter
+          type="text"
+          field="name"
+          display="menu"
+          [showOperator]="false"
+          [showAddButton]="false"
+        ></p-columnFilter>
+      </div>
+    </th>
+  </ng-template>
+
+  <ng-template [CrudTableBody]="model" let-row>
+    <td>{{ row.name }}</td>
+  </ng-template>
+</crud-table>

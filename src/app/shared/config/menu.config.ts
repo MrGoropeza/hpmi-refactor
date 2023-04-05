@@ -23,6 +23,11 @@ export const MENU_CONFIG: MenuItem[] = [
         routerLink: '/pharmacy/articles',
       },
       {
+        label: 'Categorías de Artículos',
+        icon: 'bi bi-tags',
+        routerLink: '/pharmacy/article-categories',
+      },
+      {
         label: 'Depósitos',
         icon: 'bi bi-box-seam',
         routerLink: '/pharmacy/deposits',

@@ -1,0 +1,17 @@
+<crud-modal
+  [formGroup]="formGroup"
+  [loading]="loading"
+  (save)="save()"
+  (cancel)="cancel()"
+>
+  <ng-template CrudModal let-loading>
+    <crud-input-text
+      [formGroup]="formGroup"
+      [disabled]="loading"
+      name="name"
+      label="Nombre"
+    ></crud-input-text>
+  </ng-template>
+</crud-modal>
+
+<!-- <pre>{{ formGroup.getRawValue() | json }}</pre> -->
