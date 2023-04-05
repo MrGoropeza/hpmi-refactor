@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CrudInputCalendarComponent } from '@shared/ui/crud-input-calendar/crud-input-calendar.component';
+import { CrudInputDropdownComponent } from '@shared/ui/crud-input-dropdown/crud-input-dropdown.component';
 import {
   CrudModalComponent,
   CrudModalDirective,
@@ -10,7 +11,9 @@ import { MessageService } from 'primeng/api';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Observable, take } from 'rxjs';
 import { CrudInputTextComponent } from 'src/app/shared/ui/crud-input-text/crud-input-text.component';
+import { PharmacyArticleCategoriesService } from '../../data-access/pharmacy-article-categories.service';
 import { PharmacyArticlesService } from '../../data-access/pharmacy-articles.service';
+import { PharmacyArticleCategoryModel } from '../../models/pharmacy-article-category.model';
 import { PharmacyArticleModel } from '../../models/pharmacy-article.model';
 
 @Component({
@@ -23,17 +26,20 @@ import { PharmacyArticleModel } from '../../models/pharmacy-article.model';
     CrudModalDirective,
     CrudInputTextComponent,
     CrudInputCalendarComponent,
+    CrudInputDropdownComponent,
   ],
   templateUrl: './pharmacy-articles-edit.component.html',
 })
 export class PharmacyArticlesEditComponent implements OnInit {
-  loading = false;
+  categories$: Observable<PharmacyArticleCategoryModel[]> =
+    this.categoriesService.listAll();
 
+  loading = false;
   formGroup = this.fb.group({
     id: this.fb.control<string>(''),
     name: this.fb.control<string>('', Validators.required),
     description: this.fb.control<string>('', Validators.required),
-    category: this.fb.control<number>(0, Validators.required),
+    category: this.fb.control<number | null>(null, Validators.required),
     dueDate: this.fb.control<Date | null>(null, Validators.required),
   });
 
@@ -41,8 +47,9 @@ export class PharmacyArticlesEditComponent implements OnInit {
     private fb: FormBuilder,
     private ref: DynamicDialogRef,
     private config: DynamicDialogConfig<{ id: string }>,
+    private messageService: MessageService,
     private service: PharmacyArticlesService,
-    private messageService: MessageService
+    private categoriesService: PharmacyArticleCategoriesService
   ) {}
 
   ngOnInit(): void {

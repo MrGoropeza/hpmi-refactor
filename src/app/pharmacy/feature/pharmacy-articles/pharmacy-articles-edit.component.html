@@ -19,6 +19,16 @@
       label="Descripción"
     ></crud-input-text>
 
+    <crud-input-dropdown
+      [formGroup]="formGroup"
+      [disabled]="loading"
+      name="category"
+      label="Categoría"
+      [options]="(categories$ | async)!"
+      optionLabel="name"
+      optionValue="id"
+    ></crud-input-dropdown>
+
     <crud-input-calendar
       [formGroup]="formGroup"
       [disabled]="loading"
