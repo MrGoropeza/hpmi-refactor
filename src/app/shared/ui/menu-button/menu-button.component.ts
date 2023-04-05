@@ -10,7 +10,7 @@ import { ButtonModule } from 'primeng/button';
   imports: [CommonModule, RouterModule, ButtonModule],
   template: `
     <p-button
-      styleClass="p-button-info h-40 w-40 flex-col gap-2"
+      styleClass="p-button-info w-40 h-full flex-col justify-center gap-2"
       [routerLink]="menuItem.routerLink"
     >
       <i [ngClass]="menuItem.icon" class="text-8xl"></i>
