@@ -145,6 +145,10 @@ export class CrudTableStore<Model extends CrudTableModel>
         return forkJoin(
           rows.map((selected) =>
             this.service.delete(selected).pipe(
+              tap((result) => {
+                if (result)
+                  this.success(`"${selected.Label}" borrado con éxito`);
+              }),
               catchError((e) => {
                 this.error({
                   summary: `Error borrando "${selected.Label}".`,
@@ -180,6 +184,7 @@ export class CrudTableStore<Model extends CrudTableModel>
         tap(({ summary, detail }) =>
           this.messageService.add({
             severity: 'error',
+            life: 4500,
             summary: summary,
             detail: detail,
           })
