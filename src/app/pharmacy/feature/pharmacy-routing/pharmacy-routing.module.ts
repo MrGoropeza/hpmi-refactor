@@ -29,6 +29,15 @@ const routes: Routes = [
         '../pharmacy-article-categories/pharmacy-article-categories.component'
       ).then((c) => c.PharmacyArticleCategoriesComponent),
   },
+  {
+    path: 'article-units',
+    title: 'Unidades de Artículos',
+    data: { breadcrumb: 'Unidades de Artículos' },
+    loadComponent: () =>
+      import('../pharmacy-article-units/pharmacy-article-units.component').then(
+        (c) => c.PharmacyArticleUnitsComponent
+      ),
+  },
 ];
 
 @NgModule({

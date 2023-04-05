@@ -1,0 +1,35 @@
+<crud-table [modalComponent]="modalComponent" [service]="service">
+  <ng-template CrudTableHeaders let-table>
+    <th pSortableColumn="name">
+      <div class="flex items-center">
+        Nombre
+        <p-sortIcon field="name"></p-sortIcon>
+        <p-columnFilter
+          type="text"
+          field="name"
+          display="menu"
+          [showOperator]="false"
+          [showAddButton]="false"
+        ></p-columnFilter>
+      </div>
+    </th>
+    <th pSortableColumn="abreviation">
+      <div class="flex items-center">
+        Abreviación
+        <p-sortIcon field="abreviation"></p-sortIcon>
+        <p-columnFilter
+          type="text"
+          field="abreviation"
+          display="menu"
+          [showOperator]="false"
+          [showAddButton]="false"
+        ></p-columnFilter>
+      </div>
+    </th>
+  </ng-template>
+
+  <ng-template [CrudTableBody]="model" let-row>
+    <td>{{ row.name }}</td>
+    <td>{{ row.abreviation }}</td>
+  </ng-template>
+</crud-table>

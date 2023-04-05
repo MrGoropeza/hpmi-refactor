@@ -28,6 +28,11 @@ export const MENU_CONFIG: MenuItem[] = [
         routerLink: '/pharmacy/article-categories',
       },
       {
+        label: 'Unidades de Artículos',
+        icon: 'bi bi-box',
+        routerLink: '/pharmacy/article-units',
+      },
+      {
         label: 'Depósitos',
         icon: 'bi bi-box-seam',
         routerLink: '/pharmacy/deposits',
