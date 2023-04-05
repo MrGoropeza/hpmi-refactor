@@ -1,11 +1,14 @@
 import { CrudTableService } from '@shared/interfaces/crud-service.interface';
 import { CrudTableModel } from '@shared/models/crud-table.model';
 import { RecordsResponse } from '@shared/models/records-response.model';
-import PocketBase, { RecordQueryParams } from 'pocketbase';
+import PocketBase, {
+  RecordFullListQueryParams,
+  RecordQueryParams,
+} from 'pocketbase';
 import { FilterMatchMode, FilterMetadata, LazyLoadEvent } from 'primeng/api';
 import { Observable, from, map } from 'rxjs';
 
-interface ListOptions {
+export interface ListOptions {
   page?: number;
   perPage?: number;
   queryParams?: RecordQueryParams;
@@ -33,6 +36,7 @@ export abstract class PocketBaseCrudService<Model extends CrudTableModel>
 {
   modelClass = CrudTableModel;
   protected pbCollection = this.pb.collection(this.collectionName);
+  lazyExpand = '';
 
   constructor(
     private pb: PocketBase,
@@ -57,8 +61,8 @@ export abstract class PocketBaseCrudService<Model extends CrudTableModel>
     );
   }
 
-  listAll(): Observable<Model[]> {
-    return from(this.pbCollection.getFullList<Model>()).pipe(
+  listAll(queryParams?: RecordFullListQueryParams): Observable<Model[]> {
+    return from(this.pbCollection.getFullList<Model>(queryParams)).pipe(
       map((items) =>
         items.map((item) => Object.assign(new this.modelClass(), item))
       )
@@ -94,6 +98,7 @@ export abstract class PocketBaseCrudService<Model extends CrudTableModel>
         }
       }
     }
+    queryParams.expand = this.lazyExpand;
 
     options.queryParams = queryParams;
     return this.list(options);
