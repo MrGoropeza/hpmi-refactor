@@ -12,4 +12,8 @@ export interface CrudTableService<Model extends CrudTableModel> {
   create(data: Model): Observable<Model>;
   update(data: Model): Observable<Model>;
   delete(data: Model): Observable<boolean>;
+  handleError(
+    operation: 'list' | 'get' | 'create' | 'update' | 'delete',
+    e: unknown
+  ): string;
 }

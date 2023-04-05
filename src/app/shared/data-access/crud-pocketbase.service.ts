@@ -1,7 +1,9 @@
+import { PocketBaseErrors } from '@shared/consts/pocketbase-errors';
 import { CrudTableService } from '@shared/interfaces/crud-service.interface';
 import { CrudTableModel } from '@shared/models/crud-table.model';
 import { RecordsResponse } from '@shared/models/records-response.model';
 import PocketBase, {
+  ClientResponseError,
   RecordFullListQueryParams,
   RecordQueryParams,
 } from 'pocketbase';
@@ -43,6 +45,13 @@ export abstract class PocketBaseCrudService<Model extends CrudTableModel>
     protected collectionName: string,
     protected searchProperty: string
   ) {}
+
+  handleError(
+    operation: 'list' | 'get' | 'create' | 'update' | 'delete',
+    e: ClientResponseError
+  ): string {
+    return PocketBaseErrors[operation][e.status as 400 | 403 | 404];
+  }
 
   list(options: ListOptions): Observable<RecordsResponse<Model>> {
     return from(

@@ -9,7 +9,16 @@ import { CrudTableModel } from '@shared/models/crud-table.model';
 import { RecordsResponse } from '@shared/models/records-response.model';
 import { LazyLoadEvent, MenuItem, MessageService } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
-import { Observable, exhaustMap, forkJoin, switchMap, tap } from 'rxjs';
+import {
+  Observable,
+  catchError,
+  exhaustMap,
+  forkJoin,
+  of,
+  switchMap,
+  take,
+  tap,
+} from 'rxjs';
 
 export interface CrudTableState<Model> {
   menuItems: MenuItem[];
@@ -30,6 +39,7 @@ export class CrudTableStore<Model extends CrudTableModel>
     loading: state.loading,
     menuItems: state.menuItems,
     deleteDisabled: state.selection.length === 0,
+    selection: state.selection,
   }));
 
   public service!: CrudTableService<Model>;
@@ -73,8 +83,10 @@ export class CrudTableStore<Model extends CrudTableModel>
             (response) =>
               this.patchState({ response, loading: false, refresh: event }),
             (e) => {
-              console.error(e);
-              this.error('Error cargando los registros. Recargá la página.');
+              this.error({
+                summary: 'Error cargando los registros.',
+                detail: this.service.handleError('list', e),
+              });
               this.patchState({ loading: false });
             }
           )
@@ -112,8 +124,11 @@ export class CrudTableStore<Model extends CrudTableModel>
               this.success(`"${row.Label}" borrado con éxito`);
               this.refresh(this.select((state) => state.refresh));
             },
-            () => {
-              this.error(`Error al borrar "${row.Label}". Intentá de nuevo.`);
+            (e) => {
+              this.error({
+                summary: `Error al borrar "${row.Label}".`,
+                detail: this.service.handleError('delete', e),
+              });
               this.patchState({ loading: false });
             }
           )
@@ -124,22 +139,26 @@ export class CrudTableStore<Model extends CrudTableModel>
 
   readonly deleteSelectionEffect = this.effect((trigger$) =>
     trigger$.pipe(
-      exhaustMap(() => this.select((state) => state.selection)),
-      switchMap((rows) => {
-        this.patchState({ loading: true });
-        return forkJoin(rows.map((selected) => this.service.delete(selected)));
-      }),
-      tapResponse(
-        () => {
-          this.success(`${this.model.pluralName} borrados con éxito.`);
-          this.patchState({ selection: [] });
-        },
-        () =>
-          this.error(
-            `Error borrando "${this.model.pluralName}". Intentá de nuevo.`
+      exhaustMap(() => this.select((state) => state.selection).pipe(take(1))),
+      exhaustMap((rows) => {
+        this.patchState({ loading: true, selection: [] });
+        return forkJoin(
+          rows.map((selected) =>
+            this.service.delete(selected).pipe(
+              catchError((e) => {
+                this.error({
+                  summary: `Error borrando "${selected.Label}".`,
+                  detail: this.service.handleError('delete', e),
+                });
+                return of(false);
+              })
+            )
           )
-      ),
-      tap(() => this.refresh(this.select((state) => state.refresh)))
+        );
+      }),
+      tap(() => {
+        this.refresh(this.select((state) => state.refresh));
+      })
     )
   );
 
@@ -155,15 +174,16 @@ export class CrudTableStore<Model extends CrudTableModel>
     )
   );
 
-  readonly error = this.effect((message$: Observable<string>) =>
-    message$.pipe(
-      tap((message) =>
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: message,
-        })
+  readonly error = this.effect(
+    (error$: Observable<{ summary: string; detail: string }>) =>
+      error$.pipe(
+        tap(({ summary, detail }) =>
+          this.messageService.add({
+            severity: 'error',
+            summary: summary,
+            detail: detail,
+          })
+        )
       )
-    )
   );
 }
