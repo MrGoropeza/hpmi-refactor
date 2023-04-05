@@ -2,11 +2,14 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CrudInputCalendarComponent } from '@shared/ui/crud-input-calendar/crud-input-calendar.component';
+import {
+  CrudModalComponent,
+  CrudModalDirective,
+} from '@shared/ui/crud-modal/crud-modal.component';
 import { MessageService } from 'primeng/api';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { BehaviorSubject, Observable, take } from 'rxjs';
+import { Observable, take } from 'rxjs';
 import { CrudInputTextComponent } from 'src/app/shared/ui/crud-input-text/crud-input-text.component';
-import { CrudModalButtonsComponent } from 'src/app/shared/ui/crud-modal-buttons/crud-modal-buttons.component';
 import { PharmacyArticlesService } from '../../data-access/pharmacy-articles.service';
 import { PharmacyArticleModel } from '../../models/pharmacy-article.model';
 
@@ -16,14 +19,15 @@ import { PharmacyArticleModel } from '../../models/pharmacy-article.model';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    CrudModalButtonsComponent,
+    CrudModalComponent,
+    CrudModalDirective,
     CrudInputTextComponent,
     CrudInputCalendarComponent,
   ],
   templateUrl: './pharmacy-articles-edit.component.html',
 })
 export class PharmacyArticlesEditComponent implements OnInit {
-  loading$ = new BehaviorSubject<boolean>(false);
+  loading = false;
 
   formGroup = this.fb.group({
     id: this.fb.control<string>(''),
@@ -43,12 +47,12 @@ export class PharmacyArticlesEditComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.config.data) {
-      this.loading$.next(true);
+      this.loading = true;
       this.service
         .get(this.config.data.id)
         .pipe(take(1))
         .subscribe({
-          complete: () => this.loading$.next(false),
+          complete: () => (this.loading = false),
           next: (value) => {
             if (value.dueDate) value.dueDate = new Date(value.dueDate as any);
 
@@ -71,10 +75,10 @@ export class PharmacyArticlesEditComponent implements OnInit {
   }
 
   save() {
-    this.loading$.next(true);
+    this.loading = true;
     this.formGroup.markAllAsTouched();
     if (this.formGroup.invalid) {
-      this.loading$.next(false);
+      this.loading = false;
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
@@ -107,7 +111,7 @@ export class PharmacyArticlesEditComponent implements OnInit {
         this.ref.close(true);
       },
       error: () => {
-        this.loading$.next(false);
+        this.loading = false;
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
