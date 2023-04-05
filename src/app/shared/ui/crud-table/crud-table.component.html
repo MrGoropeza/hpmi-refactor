@@ -14,6 +14,7 @@
     [loading]="vm.loading"
     [value]="vm.records ?? []"
     [totalRecords]="vm.totalRecords ?? 0"
+    [selection]="vm.selection"
     (onLazyLoad)="store.refresh($event)"
     (selectionChange)="store.selectionChange($event)"
   >
