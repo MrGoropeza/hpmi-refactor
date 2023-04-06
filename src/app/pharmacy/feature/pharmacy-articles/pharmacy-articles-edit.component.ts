@@ -12,8 +12,10 @@ import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Observable, take } from 'rxjs';
 import { CrudInputTextComponent } from 'src/app/shared/ui/crud-input-text/crud-input-text.component';
 import { PharmacyArticleCategoriesService } from '../../data-access/pharmacy-article-categories.service';
+import { PharmacyArticleUnitsService } from '../../data-access/pharmacy-article-units.service';
 import { PharmacyArticlesService } from '../../data-access/pharmacy-articles.service';
 import { PharmacyArticleCategoryModel } from '../../models/pharmacy-article-category.model';
+import { PharmacyArticleUnitModel } from '../../models/pharmacy-article-unit.model';
 import { PharmacyArticleModel } from '../../models/pharmacy-article.model';
 
 @Component({
@@ -33,13 +35,15 @@ import { PharmacyArticleModel } from '../../models/pharmacy-article.model';
 export class PharmacyArticlesEditComponent implements OnInit {
   categories$: Observable<PharmacyArticleCategoryModel[]> =
     this.categoriesService.listAll();
+  units$: Observable<PharmacyArticleUnitModel[]> = this.unitsService.listAll();
 
   loading = false;
   formGroup = this.fb.group({
-    id: this.fb.control<string>(''),
-    name: this.fb.control<string>('', Validators.required),
-    description: this.fb.control<string>('', Validators.required),
-    category: this.fb.control<number | null>(null, Validators.required),
+    id: this.fb.control<string | null>(null),
+    name: this.fb.control<string | null>(null, Validators.required),
+    description: this.fb.control<string | null>(null, Validators.required),
+    category: this.fb.control<string | null>(null, Validators.required),
+    unit: this.fb.control<string | null>(null, Validators.required),
     dueDate: this.fb.control<Date | null>(null, Validators.required),
   });
 
@@ -49,7 +53,8 @@ export class PharmacyArticlesEditComponent implements OnInit {
     private config: DynamicDialogConfig<{ id: string }>,
     private messageService: MessageService,
     private service: PharmacyArticlesService,
-    private categoriesService: PharmacyArticleCategoriesService
+    private categoriesService: PharmacyArticleCategoriesService,
+    private unitsService: PharmacyArticleUnitsService
   ) {}
 
   ngOnInit(): void {

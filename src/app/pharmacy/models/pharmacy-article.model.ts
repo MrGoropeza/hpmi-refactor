@@ -4,6 +4,7 @@ import { Model } from '@shared/decorators/model.decorator';
 import { Search } from '@shared/decorators/search.decorator';
 import { CrudTableModel } from '@shared/models/crud-table.model';
 import { PharmacyArticleCategoryModel } from './pharmacy-article-category.model';
+import { PharmacyArticleUnitModel } from './pharmacy-article-unit.model';
 
 @Model('Artículo', 'Artículos')
 export class PharmacyArticleModel extends CrudTableModel {
@@ -13,5 +14,8 @@ export class PharmacyArticleModel extends CrudTableModel {
   dueDate?: Date;
   created?: Date;
   updated?: Date;
-  expand?: { category?: PharmacyArticleCategoryModel };
+  expand?: {
+    category?: PharmacyArticleCategoryModel;
+    unit?: PharmacyArticleUnitModel;
+  };
 }

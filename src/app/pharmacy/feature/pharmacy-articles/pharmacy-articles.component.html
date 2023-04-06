@@ -39,6 +39,19 @@
         ></p-columnFilter>
       </div>
     </th>
+    <th pSortableColumn="unit.name">
+      <div class="flex items-center">
+        Unidad
+        <p-sortIcon field="unit.name"></p-sortIcon>
+        <p-columnFilter
+          type="text"
+          field="unit.name"
+          display="menu"
+          [showOperator]="false"
+          [showAddButton]="false"
+        ></p-columnFilter>
+      </div>
+    </th>
     <th pSortableColumn="dueDate">
       <div class="flex items-center">
         Fecha de Vencimiento
@@ -58,6 +71,7 @@
     <td>{{ row.name }}</td>
     <td>{{ row.description }}</td>
     <td>{{ row.expand?.category?.name }}</td>
+    <td>{{ row.expand?.unit?.name }}</td>
     <td>{{ row.dueDate | date : "dd/MM/yyyy" }}</td>
   </ng-template>
 </crud-table>

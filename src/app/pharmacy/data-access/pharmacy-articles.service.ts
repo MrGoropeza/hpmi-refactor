@@ -8,6 +8,6 @@ export class PharmacyArticlesService extends PocketBaseCrudService<PharmacyArtic
   constructor(pb: PocketBase) {
     super(pb, 'articles', 'name');
     this.modelClass = PharmacyArticleModel;
-    this.lazyExpand = 'category';
+    this.lazyExpand = 'category, unit';
   }
 }
