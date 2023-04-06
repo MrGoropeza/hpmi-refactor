@@ -1,5 +1,7 @@
 import { MenuItem } from 'primeng/api';
 
+const ignore = 'title';
+
 export const MENU_CONFIG: MenuItem[] = [
   {
     label: 'Hospital Materno Infantil',
@@ -11,8 +13,9 @@ export const MENU_CONFIG: MenuItem[] = [
     label: 'Farmacia',
     icon: 'bi bi-bandaid',
     items: [
-      { label: 'Farmacia', disabled: true },
+      { id: ignore, label: 'Farmacia', disabled: true },
       {
+        id: ignore,
         label: 'Inicio',
         icon: 'pi pi-home',
         routerLink: '/pharmacy',
@@ -47,7 +50,7 @@ export function getActualMenuItems(
 ): MenuItem[] {
   for (const item of menuConfig) {
     if (item.routerLink && item.routerLink === routerLink)
-      return menuConfig.slice(2);
+      return menuConfig.filter((item) => item.id !== ignore);
 
     if (item.items) return getActualMenuItems(routerLink, item.items);
   }
