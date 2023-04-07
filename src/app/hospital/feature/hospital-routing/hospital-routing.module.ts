@@ -20,6 +20,15 @@ const routes: Routes = [
         (c) => c.HospitalFloorsComponent
       ),
   },
+  {
+    path: 'sectors',
+    title: 'Sectores',
+    data: { breadcrumb: 'Sectores' },
+    loadComponent: () =>
+      import('../hospital-sectors/hospital-sectors.component').then(
+        (c) => c.HospitalSectorsComponent
+      ),
+  },
 ];
 
 @NgModule({
