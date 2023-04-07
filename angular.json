@@ -47,7 +47,19 @@
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": ["src/favicon.ico", "src/assets"],
-            "styles": ["src/styles.scss"],
+            "styles": [
+              "src/styles.scss",
+              {
+                "input": "node_modules/primeng/resources/themes/md-dark-deeppurple/theme.css",
+                "bundleName": "md-dark-deeppurple",
+                "inject": false
+              },
+              {
+                "input": "node_modules/primeng/resources/themes/md-light-deeppurple/theme.css",
+                "bundleName": "md-light-deeppurple",
+                "inject": false
+              }
+            ],
             "scripts": []
           },
           "configurations": {

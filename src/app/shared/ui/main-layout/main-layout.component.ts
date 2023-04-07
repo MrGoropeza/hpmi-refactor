@@ -1,13 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ThemeService } from '@shared/data-access/theme.service';
 import { MenuItem } from 'primeng/api';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { MegaMenuModule } from 'primeng/megamenu';
 import { SlideMenuModule } from 'primeng/slidemenu';
-import { filter, map, Observable, of, switchMap } from 'rxjs';
+import { Observable, filter, map, of, switchMap } from 'rxjs';
 import { MENU_CONFIG } from '../../config/menu.config';
 
 @Component({
@@ -47,7 +48,21 @@ export class MainLayoutComponent {
 
   menuItems: MenuItem[] = MENU_CONFIG;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute) {}
+  constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    protected themeService: ThemeService
+  ) {
+    themeService.setTheme();
+  }
+
+  switchTheme() {
+    if (this.themeService.theme === 'dark') {
+      this.themeService.setLightTheme();
+    } else {
+      this.themeService.setDarkTheme();
+    }
+  }
 
   private createBreadcrumbs(
     actualroute: ActivatedRoute,
