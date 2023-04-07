@@ -10,6 +10,34 @@ export const MENU_CONFIG: MenuItem[] = [
     routerLink: '/',
   },
   {
+    label: 'Hospital',
+    icon: 'bi bi-hospital',
+    items: [
+      { id: ignore, label: 'Hospital', disabled: true },
+      {
+        id: ignore,
+        label: 'Inicio',
+        icon: 'pi pi-home',
+        routerLink: '/hospital',
+      },
+      {
+        label: 'Plantas',
+        icon: 'bi bi-layers',
+        routerLink: '/hospital/floors',
+      },
+      {
+        label: 'Sectores',
+        icon: 'bi bi-inboxes',
+        routerLink: '/hospital/sectors',
+      },
+      {
+        label: 'Depósitos',
+        icon: 'bi bi-box-seam',
+        routerLink: '/hospital/deposits',
+      },
+    ],
+  },
+  {
     label: 'Farmacia',
     icon: 'bi bi-bandaid',
     items: [
@@ -34,11 +62,6 @@ export const MENU_CONFIG: MenuItem[] = [
         label: 'Unidades de Artículos',
         icon: 'bi bi-box',
         routerLink: '/pharmacy/article-units',
-      },
-      {
-        label: 'Depósitos',
-        icon: 'bi bi-box-seam',
-        routerLink: '/pharmacy/deposits',
       },
     ],
   },

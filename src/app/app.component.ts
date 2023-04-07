@@ -21,6 +21,14 @@ export const APP_ROUTES: Routes = [
         './pharmacy/feature/pharmacy-routing/pharmacy-routing.module'
       ).then((m) => m.PharmacyRoutingModule),
   },
+  {
+    path: 'hospital',
+    data: { breadcrumb: 'Hospital' },
+    loadChildren: () =>
+      import(
+        './hospital/feature/hospital-routing/hospital-routing.module'
+      ).then((m) => m.HospitalRoutingModule),
+  },
 ];
 
 @Component({
