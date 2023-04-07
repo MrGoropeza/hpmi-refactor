@@ -9,6 +9,7 @@ import { HospitalSectorModel } from '../models/hospital-sector.model';
 export class HospitalSectorsService extends PocketBaseCrudService<HospitalSectorModel> {
   constructor(pb: PocketBase) {
     super(pb, 'sectors', 'name');
-    (this.modelClass = HospitalSectorModel), (this.lazyExpand = 'floor');
+    this.modelClass = HospitalSectorModel;
+    this.lazyExpand = 'floor';
   }
 }
