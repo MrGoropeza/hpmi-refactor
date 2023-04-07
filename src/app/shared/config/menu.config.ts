@@ -75,7 +75,11 @@ export function getActualMenuItems(
     if (item.routerLink && item.routerLink === routerLink)
       return menuConfig.filter((item) => item.id !== ignore);
 
-    if (item.items) return getActualMenuItems(routerLink, item.items);
+    if (
+      item.items &&
+      item.items.find((value) => value.routerLink === routerLink)
+    )
+      return getActualMenuItems(routerLink, item.items);
   }
 
   return [];
