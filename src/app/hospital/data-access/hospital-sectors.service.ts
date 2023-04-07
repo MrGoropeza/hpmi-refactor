@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { PocketBaseCrudService } from '@shared/data-access/crud-pocketbase.service';
 import PocketBase from 'pocketbase';
-import { HospitalSectorModel } from '../feature/models/hospital-sector.model';
+import { HospitalSectorModel } from '../models/hospital-sector.model';
 
 @Injectable({
   providedIn: 'root',

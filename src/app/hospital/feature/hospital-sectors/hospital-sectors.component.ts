@@ -7,7 +7,7 @@ import {
 } from '@shared/ui/crud-table/crud-table.component';
 import { Table, TableModule, TableService } from 'primeng/table';
 import { HospitalSectorsService } from '../../data-access/hospital-sectors.service';
-import { HospitalSectorModel } from '../models/hospital-sector.model';
+import { HospitalSectorModel } from '../../models/hospital-sector.model';
 import { HospitalSectorsEditComponent } from './hospital-sectors-edit.component';
 
 @Component({

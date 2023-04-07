@@ -12,7 +12,7 @@ import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Observable, take } from 'rxjs';
 import { HospitalFloorsService } from '../../data-access/hospital-floors.service';
 import { HospitalSectorsService } from '../../data-access/hospital-sectors.service';
-import { HospitalSectorModel } from '../models/hospital-sector.model';
+import { HospitalSectorModel } from '../../models/hospital-sector.model';
 
 @Component({
   selector: 'app-hospital-sectors-edit',

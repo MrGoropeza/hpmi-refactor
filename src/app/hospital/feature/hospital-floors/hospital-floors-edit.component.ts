@@ -11,7 +11,7 @@ import { MessageService } from 'primeng/api';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Observable, take } from 'rxjs';
 import { HospitalFloorsService } from '../../data-access/hospital-floors.service';
-import { HospitalFloorModel } from '../models/hospital-floor.model';
+import { HospitalFloorModel } from '../../models/hospital-floor.model';
 
 @Component({
   selector: 'app-hospital-floors-edit',
