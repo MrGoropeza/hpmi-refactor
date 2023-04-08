@@ -66,7 +66,7 @@ export class CrudInputDropdownComponent {
   public set disabled(v: boolean) {
     const control = this.formGroup.controls[this.name];
     if (!control) return;
-    if (v) control.disable();
-    if (!v) control.enable();
+    if (v) control.disable({ emitEvent: false });
+    if (!v) control.enable({ emitEvent: false });
   }
 }
