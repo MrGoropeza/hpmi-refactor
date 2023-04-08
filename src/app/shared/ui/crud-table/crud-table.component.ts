@@ -51,18 +51,18 @@ export class CrudTableBodyDirective<Model extends CrudTableModel> {
   }
 }
 
-interface CrudTableActionsContext<Model extends CrudTableModel> {
+interface CrudTableRowActionsContext<Model extends CrudTableModel> {
   $implicit: Model;
 }
 
-@Directive({ selector: 'ng-template[CrudTableActions]', standalone: true })
-export class CrudTableActionsDirective<Model extends CrudTableModel> {
-  @Input('CrudTableActions') model!: Model;
+@Directive({ selector: 'ng-template[CrudTableRowActions]', standalone: true })
+export class CrudTableRowActionsDirective<Model extends CrudTableModel> {
+  @Input('CrudTableRowActions') model!: Model;
 
   static ngTemplateContextGuard<Model extends CrudTableModel>(
-    dir: CrudTableActionsDirective<Model>,
+    dir: CrudTableRowActionsDirective<Model>,
     ctx: unknown
-  ): ctx is CrudTableActionsContext<Model> {
+  ): ctx is CrudTableRowActionsContext<Model> {
     return true;
   }
 }
@@ -92,7 +92,7 @@ export class CrudTableComponent<Model extends CrudTableModel>
   @ContentChild(CrudTableBodyDirective<Model>, { read: TemplateRef })
   bodyRef!: TemplateRef<any>;
 
-  @ContentChild(CrudTableActionsDirective<Model>, { read: TemplateRef })
+  @ContentChild(CrudTableRowActionsDirective<Model>, { read: TemplateRef })
   actionsRef!: TemplateRef<any>;
 
   @Input() modalComponent!: Type<any>;
