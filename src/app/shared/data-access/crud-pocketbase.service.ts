@@ -53,6 +53,12 @@ export abstract class PocketBaseCrudService<Model extends CrudTableModel>
     return PocketBaseErrors[operation][e.status as 400 | 403 | 404];
   }
 
+  firstListItem(filter: string, queryParams?: RecordFullListQueryParams) {
+    return from(this.pbCollection.getFirstListItem(filter, queryParams)).pipe(
+      map((record) => Object.assign(new this.modelClass(), record))
+    );
+  }
+
   list(options: ListOptions): Observable<RecordsResponse<Model>> {
     return from(
       this.pbCollection.getList<Model>(
