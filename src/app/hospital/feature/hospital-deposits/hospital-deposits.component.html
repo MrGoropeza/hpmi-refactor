@@ -1,0 +1,66 @@
+<crud-table [modalComponent]="modalComponent" [service]="service">
+  <ng-template CrudTableHeaders let-table>
+    <th pSortableColumn="id">
+      <div class="flex items-center">
+        ID
+        <p-sortIcon field="id"></p-sortIcon>
+        <p-columnFilter
+          type="text"
+          field="id"
+          display="menu"
+          [showOperator]="false"
+          [showAddButton]="false"
+        ></p-columnFilter>
+      </div>
+    </th>
+
+    <th pSortableColumn="sector.name">
+      <div class="flex items-center">
+        Sector
+        <p-sortIcon field="sector.name"></p-sortIcon>
+        <p-columnFilter
+          type="text"
+          field="sector.name"
+          display="menu"
+          [showOperator]="false"
+          [showAddButton]="false"
+        ></p-columnFilter>
+      </div>
+    </th>
+
+    <th pSortableColumn="sector.floor.name">
+      <div class="flex items-center">
+        Planta
+        <p-sortIcon field="sector.floor.name"></p-sortIcon>
+        <p-columnFilter
+          type="text"
+          field="sector.floor.name"
+          display="menu"
+          [showOperator]="false"
+          [showAddButton]="false"
+        ></p-columnFilter>
+      </div>
+    </th>
+
+    <th pSortableColumn="type.name">
+      <div class="flex items-center">
+        Tipo
+        <p-sortIcon field="type.name"></p-sortIcon>
+        <p-columnFilter
+          type="text"
+          field="type.name"
+          display="menu"
+          [showOperator]="false"
+          [showAddButton]="false"
+        ></p-columnFilter>
+      </div>
+    </th>
+  </ng-template>
+
+  <ng-template [CrudTableBody]="model" let-row>
+    <td>{{ row.id }}</td>
+    <td>{{ row.expand?.sector?.name }}</td>
+    <td>{{ row.expand?.sector?.expand?.floor?.name }}</td>
+    <td>{{ row.expand?.type?.name }}</td>
+  </ng-template>
+</crud-table>

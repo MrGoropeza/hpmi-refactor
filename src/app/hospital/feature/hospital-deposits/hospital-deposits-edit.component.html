@@ -1,0 +1,28 @@
+<crud-modal
+  [formGroup]="formGroup"
+  [loading]="loading"
+  (save)="save()"
+  (cancel)="cancel()"
+>
+  <ng-template CrudModal let-loading>
+    <crud-input-dropdown
+      [formGroup]="formGroup"
+      [disabled]="loading"
+      name="sector"
+      label="Sector"
+      [options]="(sectors$ | async)!"
+    ></crud-input-dropdown>
+
+    <crud-input-dropdown
+      [formGroup]="formGroup"
+      [disabled]="loading"
+      name="type"
+      label="Tipo"
+      [options]="(types$ | async)!"
+      optionLabel="name"
+      optionValue="id"
+    ></crud-input-dropdown>
+  </ng-template>
+</crud-modal>
+
+<!-- <pre>{{ formGroup.getRawValue() | json }}</pre> -->

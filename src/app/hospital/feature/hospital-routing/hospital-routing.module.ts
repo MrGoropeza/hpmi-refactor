@@ -29,6 +29,15 @@ const routes: Routes = [
         (c) => c.HospitalSectorsComponent
       ),
   },
+  {
+    path: 'deposits',
+    title: 'Depósitos',
+    data: { breadcrumb: 'Depósitos' },
+    loadComponent: () =>
+      import('../hospital-deposits/hospital-deposits.component').then(
+        (c) => c.HospitalDepositsComponent
+      ),
+  },
 ];
 
 @NgModule({
