@@ -19,6 +19,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { MenuModule } from 'primeng/menu';
 import { Table, TableModule } from 'primeng/table';
+import { CrudTableActionButtonComponent } from '../crud-table-action-button/crud-table-action-button.component';
 
 interface CrudTableHeadersContext {
   $implicit: Table;
@@ -50,6 +51,22 @@ export class CrudTableBodyDirective<Model extends CrudTableModel> {
   }
 }
 
+interface CrudTableActionsContext<Model extends CrudTableModel> {
+  $implicit: Model;
+}
+
+@Directive({ selector: 'ng-template[CrudTableActions]', standalone: true })
+export class CrudTableActionsDirective<Model extends CrudTableModel> {
+  @Input('CrudTableActions') model!: Model;
+
+  static ngTemplateContextGuard<Model extends CrudTableModel>(
+    dir: CrudTableActionsDirective<Model>,
+    ctx: unknown
+  ): ctx is CrudTableActionsContext<Model> {
+    return true;
+  }
+}
+
 @Component({
   selector: 'crud-table',
   standalone: true,
@@ -61,6 +78,7 @@ export class CrudTableBodyDirective<Model extends CrudTableModel> {
     TableModule,
     MenuModule,
     CrudTableInjectorPipe,
+    CrudTableActionButtonComponent,
   ],
   providers: [provideComponentStore(CrudTableStore)],
   templateUrl: './crud-table.component.html',
@@ -74,7 +92,8 @@ export class CrudTableComponent<Model extends CrudTableModel>
   @ContentChild(CrudTableBodyDirective<Model>, { read: TemplateRef })
   bodyRef!: TemplateRef<any>;
 
-  @ContentChild('actions') actionsRef!: TemplateRef<any>;
+  @ContentChild(CrudTableActionsDirective<Model>, { read: TemplateRef })
+  actionsRef!: TemplateRef<any>;
 
   @Input() modalComponent!: Type<any>;
   @Input() service!: CrudTableService<Model>;

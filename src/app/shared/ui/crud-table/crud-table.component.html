@@ -102,19 +102,23 @@
 
         <td>
           <div class="flex gap-1">
-            <ng-container *ngTemplateOutlet="actionsRef"></ng-container>
-            <button
-              pButton
-              class="p-button-rounded p-button-raised p-button-warning"
+            <ng-container
+              *ngTemplateOutlet="actionsRef; context: { $implicit: row }"
+            ></ng-container>
+
+            <crud-table-action-button
               icon="pi pi-pencil"
+              tooltip="Editar"
+              severity="warning"
               (click)="store.openModal(row)"
-            ></button>
-            <button
-              pButton
-              class="p-button-rounded p-button-raised p-button-danger"
+            ></crud-table-action-button>
+
+            <crud-table-action-button
               icon="pi pi-trash"
+              tooltip="Eliminar"
+              severity="danger"
               (click)="delete(row)"
-            ></button>
+            ></crud-table-action-button>
           </div>
         </td>
       </tr>
