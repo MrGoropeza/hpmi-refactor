@@ -74,6 +74,8 @@ export class CrudTableComponent<Model extends CrudTableModel>
   @ContentChild(CrudTableBodyDirective<Model>, { read: TemplateRef })
   bodyRef!: TemplateRef<any>;
 
+  @ContentChild('actions') actionsRef!: TemplateRef<any>;
+
   @Input() modalComponent!: Type<any>;
   @Input() service!: CrudTableService<Model>;
 
