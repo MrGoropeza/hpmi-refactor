@@ -110,14 +110,14 @@
               icon="pi pi-pencil"
               tooltip="Editar"
               severity="warning"
-              (click)="store.openModal(row)"
+              (buttonClick)="store.openModal(row)"
             ></crud-table-action-button>
 
             <crud-table-action-button
               icon="pi pi-trash"
               tooltip="Eliminar"
               severity="danger"
-              (click)="delete(row)"
+              (buttonClick)="delete(row)"
             ></crud-table-action-button>
           </div>
         </td>

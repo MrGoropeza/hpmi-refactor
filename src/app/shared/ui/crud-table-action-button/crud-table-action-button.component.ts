@@ -10,11 +10,12 @@ import { TooltipModule } from 'primeng/tooltip';
   template: `
     <button
       pButton
+      type="button"
       class="p-button-rounded p-button-raised {{ severityClass }}"
       [pTooltip]="tooltip"
       [tooltipPosition]="tooltipPosition"
       [icon]="icon"
-      (click)="click.emit()"
+      (click)="buttonClick.emit()"
     ></button>
   `,
 })
@@ -30,7 +31,7 @@ export class CrudTableActionButtonComponent {
     | 'help'
     | 'danger' = 'primary';
   @Input() icon = 'pi pi-play';
-  @Output() click = new EventEmitter();
+  @Output() buttonClick = new EventEmitter();
 
   get severityClass(): string {
     return this.severity !== 'primary' ? `p-button-${this.severity}` : '';
