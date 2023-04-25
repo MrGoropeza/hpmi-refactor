@@ -55,7 +55,7 @@
             label="Borrar"
             class="p-button-danger"
             [disabled]="vm.deleteDisabled"
-            (click)="deleteSelection()"
+            (click)="store.deleteSelection()"
           ></button>
         </div>
       </div>
@@ -103,22 +103,27 @@
         <td>
           <div class="flex gap-1">
             <ng-container
-              *ngTemplateOutlet="actionsRef; context: { $implicit: row }"
+              *ngTemplateOutlet="
+                actionsRef ?? defaultActions;
+                context: { $implicit: row, store }
+              "
             ></ng-container>
 
-            <crud-table-action-button
-              icon="pi pi-pencil"
-              tooltip="Editar"
-              severity="warning"
-              (buttonClick)="store.openModal(row)"
-            ></crud-table-action-button>
+            <ng-template #defaultActions>
+              <crud-table-action-button
+                icon="pi pi-pencil"
+                tooltip="Editar"
+                severity="warning"
+                (buttonClick)="store.openModal(row)"
+              ></crud-table-action-button>
 
-            <crud-table-action-button
-              icon="pi pi-trash"
-              tooltip="Eliminar"
-              severity="danger"
-              (buttonClick)="delete(row)"
-            ></crud-table-action-button>
+              <crud-table-action-button
+                icon="pi pi-trash"
+                tooltip="Eliminar"
+                severity="danger"
+                (buttonClick)="store.delete(row)"
+              ></crud-table-action-button>
+            </ng-template>
           </div>
         </td>
       </tr>

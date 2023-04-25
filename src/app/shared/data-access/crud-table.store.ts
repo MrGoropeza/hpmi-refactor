@@ -1,4 +1,4 @@
-import { Injectable, Type } from '@angular/core';
+import { Injectable, Type, inject } from '@angular/core';
 import {
   ComponentStore,
   OnStateInit,
@@ -7,7 +7,12 @@ import {
 import { CrudTableService } from '@shared/interfaces/crud-service.interface';
 import { CrudTableModel } from '@shared/models/crud-table.model';
 import { RecordsResponse } from '@shared/models/records-response.model';
-import { LazyLoadEvent, MenuItem, MessageService } from 'primeng/api';
+import {
+  ConfirmationService,
+  LazyLoadEvent,
+  MenuItem,
+  MessageService,
+} from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
 import {
   Observable,
@@ -46,12 +51,10 @@ export class CrudTableStore<Model extends CrudTableModel>
   public modalComponent!: Type<any>;
   model!: CrudTableModel;
 
-  constructor(
-    private dialogService: DialogService,
-    private messageService: MessageService
-  ) {
-    super();
-  }
+  protected confirmationService = inject(ConfirmationService);
+  private dialogService = inject(DialogService);
+  private messageService = inject(MessageService);
+
   ngrxOnStateInit() {
     this.model = new this.service.modelClass();
   }
@@ -191,4 +194,23 @@ export class CrudTableStore<Model extends CrudTableModel>
         )
       )
   );
+
+  delete(row: Model) {
+    this.confirmationService.confirm({
+      header: `Eliminar "${row.Label}"`,
+      message: '¿Estás seguro de eliminar el registro?',
+      acceptButtonStyleClass: 'p-button-danger',
+      accept: () => this.deleteEffect(row),
+    });
+  }
+
+  deleteSelection() {
+    const model = new this.service.modelClass();
+    this.confirmationService.confirm({
+      header: `Eliminar varios ${model.pluralName}`,
+      message: '¿Estás seguro que querés eliminarlos?',
+      acceptButtonStyleClass: 'p-button-danger',
+      accept: () => this.deleteSelectionEffect(),
+    });
+  }
 }

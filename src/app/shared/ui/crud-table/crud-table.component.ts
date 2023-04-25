@@ -7,6 +7,7 @@ import {
   OnInit,
   TemplateRef,
   Type,
+  inject,
 } from '@angular/core';
 import { LetModule } from '@ngrx/component';
 import { provideComponentStore } from '@ngrx/component-store';
@@ -14,7 +15,6 @@ import { CrudTableStore } from '@shared/data-access/crud-table.store';
 import { CrudTableService } from '@shared/interfaces/crud-service.interface';
 import { CrudTableModel } from '@shared/models/crud-table.model';
 import { CrudTableInjectorPipe } from '@shared/pipes/crud-table-injector.pipe';
-import { ConfirmationService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { MenuModule } from 'primeng/menu';
@@ -53,6 +53,7 @@ export class CrudTableBodyDirective<Model extends CrudTableModel> {
 
 interface CrudTableRowActionsContext<Model extends CrudTableModel> {
   $implicit: Model;
+  store: CrudTableStore<Model>;
 }
 
 @Directive({ selector: 'ng-template[CrudTableRowActions]', standalone: true })
@@ -98,10 +99,7 @@ export class CrudTableComponent<Model extends CrudTableModel>
   @Input() modalComponent!: Type<any>;
   @Input() service!: CrudTableService<Model>;
 
-  constructor(
-    protected readonly store: CrudTableStore<Model>,
-    private confirmationService: ConfirmationService
-  ) {}
+  protected readonly store = inject(CrudTableStore<Model>);
 
   ngOnInit(): void {
     this.store.modalComponent = this.modalComponent;
@@ -120,29 +118,12 @@ export class CrudTableComponent<Model extends CrudTableModel>
           icon: 'pi pi-trash',
           label: 'Borrar',
           disabled: true,
-          command: () => this.deleteSelection(),
+          command: () => this.store.deleteSelection(),
         },
       ],
       refresh: {},
       response: {},
       selection: [],
-    });
-  }
-
-  delete(row: Model) {
-    this.confirmationService.confirm({
-      header: `Eliminar "${row.Label}"`,
-      message: '¿Estás seguro de eliminar el registro?',
-      accept: () => this.store.deleteEffect(row),
-    });
-  }
-
-  deleteSelection() {
-    const model = new this.service.modelClass();
-    this.confirmationService.confirm({
-      header: `Eliminar varios ${model.pluralName}`,
-      message: '¿Estás seguro que querés eliminarlos?',
-      accept: () => this.store.deleteSelectionEffect(),
     });
   }
 }
